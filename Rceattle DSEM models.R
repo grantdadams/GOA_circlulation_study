@@ -33,7 +33,7 @@ goa_nork <- Rceattle::fit_mod(data_list = nrdata,
                             msmMode = 0,
                             verbose = 1,
                             phase = TRUE,
-                            initMode = 1,
+                            initMode = 2,
                             M1Fun = build_M1(updateM1 = TRUE,
                                              M1_model     = 1,
                                              M1_use_prior = TRUE,
@@ -53,7 +53,7 @@ goa_pk <- fit_mod(data_list = pkdata,
                         phase = TRUE)       # Phase
 
 # Pcod ----
-Rceattle::fit_mod(data_list = pcod24,
+Rceattle::fit_mod(data_list = pcoddata,
                   inits = NULL, # Initial parameters = 0
                   estimateMode = 0, # Estimate
                   M1Fun = build_M1(M1_model = 1,
