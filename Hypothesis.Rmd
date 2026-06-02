@@ -1,0 +1,29 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+Rceattle uses age-1 recruitment with Jan-1 b-day
+
+# Hypotheses
+Cod: winter (age-0), spring (age-0.25), summer (age-0.5)
+Pollock: winter (age-0), spring (age-0.25), summer (age-0.5)
+Sablefish: winter (age-0), spring (age-0.25), summer (age-0.5)
+Northern rockfish: winter (age-0), spring (age-0.25), summer (age-0.5)
+ATF: fall (lag-1 of age 0.75), winter (age-0), spring (age-0.25), summer (age-0.5)
+
+# Season/Month
+Winter: DJF (Dec, Jan, Feb)
+Spring: MAM
+Summer: JJA
+Fall: SON
+
+# Performance metrics:
+retrospective-forecast skill
+AIC
+effect size
+SD of beta
+retro stability of effect size
+
+# TODO (June 17th)
+Double check bridging of Sablefish
+Derive performance metric tables
