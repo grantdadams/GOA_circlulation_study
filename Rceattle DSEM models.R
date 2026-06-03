@@ -28,6 +28,8 @@ pcoddata$env_data <- pcoddata$env_data %>%
 nrdata$env_data <- nrdata$env_data %>%
   full_join(envdata)
 
+plot_data(nrdata)
+
 
 # Fit models ----
 # * Arrowtooth ----
