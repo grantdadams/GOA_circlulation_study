@@ -28,7 +28,29 @@ envdata <- read.csv("Data/RecrClimDSEMdata.csv")
 
 envdata  <- envdata %>%
   dplyr::mutate(post2014 = year >= 2014 & year <= 2016) %>%
-  dplyr::rename(Year = year)
+  dplyr::rename(Year = year) %>%
+  # Rename covariates to intuitive names so the SEMs are easier to read ----
+  dplyr::rename(
+    NGAO_fall                 = NGAO.OND,
+    GOADI_fall                = GOADI.OND,
+    NGAO_spring               = NGAO.JFMAM,
+    GOADI_spring              = GOADI.JFMAM,
+    Upwelling_WGOA_spring     = BakunUpwellN60W149_JFMAM,
+    Upwelling_EGOA_spring     = BakunUpwellN57W137_JFMAM,
+    Wind_WGOA_spring          = SHEL.APRMAY.WINDDIR,
+    SST_WGOA_shelfedge_spring = WGOA.SST.LL.spr.shelfedge,
+    SST_EGOA_shelfedge_spring = EGOA.SST.LL.spr.shelfedge,
+    BottomTemp_WGOA_winter    = Bot.temp.Shel.Win.MACE,
+    SST_WGOA_spring           = SSTwgoaFMA,
+    SST_EGOA_spring           = SSTegoaFMA,
+    Neocalanus_winterspring   = Neocalanus.biom.LnP.WinSpr,
+    Copepods_small_spring     = SWDLN.SM.CAL.COP.SPR
+  ) %>%
+  # Scale and center every covariate (z-score); keep Year/post2014 as-is ----
+  dplyr::mutate(dplyr::across(
+    -c(Year, post2014),
+    ~ as.numeric(scale(.))
+  ))
 
 # Create seasonal indices ----
 seasons <- data.frame(Season = c("Winter", "Winter",

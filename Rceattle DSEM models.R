@@ -147,3 +147,28 @@ goa_cod_dsem <- Rceattle::fit_mod(data_list = pcoddata,
                                   fit_control = fit_control(
                                     verbose = 1,
                                     phase = TRUE))
+
+# Summaries ----
+summary(goa_atf)
+summary(goa_atf_sem)
+
+summ_nork <- summary(goa_nork)$coefficients %>% dplyr::mutate(Model = "Base",
+                                                          Species = "NORK")
+summ_nork_sem <- summary(goa_nork_sem)$coefficients %>% dplyr::mutate(Model = "DSEM",
+                                                                   Species = "NORK")
+
+summ_pk <- summary(goa_pk)$coefficients %>% dplyr::mutate(Model = "Base",
+                                                          Species = "Pollock")
+summ_pk_sem <- summary(goa_pk_dsem)$coefficients %>% dplyr::mutate(Model = "DSEM",
+                                                                   Species = "Pollock")
+
+summ_cod <- summary(goa_cod)$coefficients %>% dplyr::mutate(Model = "Base",
+                                                          Species = "Cod")
+summ_cod_sem <- summary(goa_cod_dsem)$coefficients %>% dplyr::mutate(Model = "DSEM",
+                                                                   Species = "Cod")
+
+
+results <- do.call("rbind", list(summ_cod, summ_cod_sem, summ_pk, summ_pk_sem))
+write.csv(results, file = "Results/Initial_DSEM.csv")
+
+
