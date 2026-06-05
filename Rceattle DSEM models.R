@@ -30,6 +30,10 @@ nrdata$env_data <- nrdata$env_data %>%
 
 plot_data(nrdata)
 
+atfdata$projyr <- atfdata$endyr
+nrdata$projyr <- nrdata$endyr
+pcoddata$projyr <- pcoddata$endyr
+pkdata$projyr <- pkdata$endyr
 
 # Fit models ----
 # * Arrowtooth ----
@@ -43,6 +47,8 @@ goa_atf <- Rceattle::fit_mod(data_list = atfdata,
                              fit_control = fit_control(
                                verbose = 1,
                                phase = TRUE))
+summary(goa_atf)
+
 
 goa_atf_sem <- Rceattle::fit_mod(data_list = atfdata,
                                  inits = NULL, # Initial parameters = 0
@@ -149,8 +155,10 @@ goa_cod_dsem <- Rceattle::fit_mod(data_list = pcoddata,
                                     phase = TRUE))
 
 # Summaries ----
-summary(goa_atf)
-summary(goa_atf_sem)
+summ_atf <- summary(goa_atf)$coefficients %>% dplyr::mutate(Model = "Base",
+                                                              Species = "ATF")
+summ_atf_sem <- summary(goa_atf_sem)$coefficients %>% dplyr::mutate(Model = "DSEM",
+                                                                      Species = "ATF")
 
 summ_nork <- summary(goa_nork)$coefficients %>% dplyr::mutate(Model = "Base",
                                                           Species = "NORK")
