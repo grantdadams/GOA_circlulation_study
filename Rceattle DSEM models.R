@@ -54,7 +54,7 @@ goa_atf_iid <- Rceattle::fit_mod(data_list = atfdata,
                                  estimateMode = 0, # Estimate
                                  random_rec = TRUE,
                                  dsem = build_DSEM(
-                                   sem = atfiid,
+                                   sem = iidsem,
                                    family = "normal"
                                  ),
                                  msmMode = 0, # Single species mode
@@ -105,7 +105,7 @@ goa_nork_iid <- Rceattle::fit_mod(data_list = nrdata,
                                   msmMode = 0,
                                   initMode = 2,
                                   dsem = build_DSEM(
-                                    sem = norkiid,
+                                    sem = iidsem,
                                     family = "normal"
                                   ),
                                   M1Fun = build_M1(updateM1 = TRUE,
@@ -154,7 +154,7 @@ goa_pk_iid <- fit_mod(data_list = pkdata,
                        msmMode = 0,        # Single species mode
                        initMode = 1,
                        dsem = build_DSEM(
-                         sem = pollockiid,
+                         sem = iidsem,
                          family = "normal"
                        ),
                        fit_control = fit_control(
@@ -192,7 +192,7 @@ goa_cod_iid <- Rceattle::fit_mod(data_list = pcoddata,
 
                                   M1Fun        = M1_block,
                                   dsem = build_DSEM(
-                                    sem = pcodiid,
+                                    sem = iidsem,
                                     family = "normal"
                                   ),
                                   random_rec = TRUE,

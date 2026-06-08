@@ -1,4 +1,13 @@
+iidsem = "
+  # source                  link  target,                    lag param_name        start
+  # ------------------------------------------------------------------------------------
+  # --- Recruitment ---
+  NGAO_spring             ->  recdevs1,                 1,  NGAO_to_R,        0
+  GOADI_spring            ->  recdevs1,                 1,  GOADI_to_R,       0
 
+  # --- Recruitment variance ---
+  recdevs1 <-> recdevs1,                                0,  sigmaR1,          1
+"
 
 # Arrowtooth ----
 atfsem = "
