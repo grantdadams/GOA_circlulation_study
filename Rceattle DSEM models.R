@@ -1,6 +1,7 @@
 # Use outline to navigate
 
 # Libraries ----
+# remotes::install_github("grantdadams/Rceattle@dev-DSEM")
 library(Rceattle) # dev-DSEM
 library(dplyr)
 
@@ -215,28 +216,45 @@ goa_cod_dsem <- Rceattle::fit_mod(data_list = pcoddata,
                                     phase = TRUE))
 
 # Summaries ----
+# - ATF
 summ_atf <- summary(goa_atf)$coefficients %>% dplyr::mutate(Model = "Base",
                                                               Species = "ATF")
+summ_atf_iid <- summary(goa_atf_iid)$coefficients %>% dplyr::mutate(Model = "IID",
+                                                                  Species = "ATF")
 summ_atf_sem <- summary(goa_atf_sem)$coefficients %>% dplyr::mutate(Model = "DSEM",
                                                                       Species = "ATF")
+results <- do.call("rbind", list(summ_atf, summ_atf_iid, summ_atf_sem))
+write.csv(results, file = "Results/Initial_DSEM_atf.csv")
 
+# - NORK
 summ_nork <- summary(goa_nork)$coefficients %>% dplyr::mutate(Model = "Base",
                                                           Species = "NORK")
+summ_nork_iid <- summary(goa_nork_iid)$coefficients %>% dplyr::mutate(Model = "IID",
+                                                                  Species = "NORK")
 summ_nork_sem <- summary(goa_nork_sem)$coefficients %>% dplyr::mutate(Model = "DSEM",
                                                                    Species = "NORK")
+results <- do.call("rbind", list(summ_nork, summ_nork_iid, summ_nork_sem))
+write.csv(results, file = "Results/Initial_DSEM_nork.csv")
 
+# - Pollock
 summ_pk <- summary(goa_pk)$coefficients %>% dplyr::mutate(Model = "Base",
+                                                          Species = "Pollock")
+summ_pk_iid <- summary(goa_pk_iid)$coefficients %>% dplyr::mutate(Model = "IID",
                                                           Species = "Pollock")
 summ_pk_sem <- summary(goa_pk_dsem)$coefficients %>% dplyr::mutate(Model = "DSEM",
                                                                    Species = "Pollock")
+results <- do.call("rbind", list(summ_pk, summ_pk_iid, summ_pk_sem))
+write.csv(results, file = "Results/Initial_DSEM_pk.csv")
 
+# - Cod
 summ_cod <- summary(goa_cod)$coefficients %>% dplyr::mutate(Model = "Base",
                                                           Species = "Cod")
+summ_cod_iid <- summary(goa_cod_iid)$coefficients %>% dplyr::mutate(Model = "IID",
+                                                                  Species = "Cod")
 summ_cod_sem <- summary(goa_cod_dsem)$coefficients %>% dplyr::mutate(Model = "DSEM",
                                                                    Species = "Cod")
+results <- do.call("rbind", list(summ_cod, summ_cod_iid, summ_cod_sem))
+write.csv(results, file = "Results/Initial_DSEM_cod.csv")
 
-
-results <- do.call("rbind", list(summ_cod, summ_cod_sem, summ_pk, summ_pk_sem))
-write.csv(results, file = "Results/Initial_DSEM.csv")
 
 
