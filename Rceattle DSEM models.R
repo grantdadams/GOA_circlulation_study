@@ -47,8 +47,21 @@ goa_atf <- Rceattle::fit_mod(data_list = atfdata,
                              fit_control = fit_control(
                                verbose = 1,
                                phase = TRUE))
-summary(goa_atf)
 
+goa_atf_iid <- Rceattle::fit_mod(data_list = atfdata,
+                                 inits = NULL, # Initial parameters = 0
+                                 file = NULL, # Don't save
+                                 estimateMode = 0, # Estimate
+                                 random_rec = TRUE,
+                                 dsem = build_DSEM(
+                                   sem = atfiid,
+                                   family = "normal"
+                                 ),
+                                 msmMode = 0, # Single species mode
+                                 initMode = 1,
+                                 fit_control = fit_control(
+                                   verbose = 1,
+                                   phase = TRUE))
 
 goa_atf_sem <- Rceattle::fit_mod(data_list = atfdata,
                                  inits = NULL, # Initial parameters = 0
@@ -86,6 +99,25 @@ goa_nork <- Rceattle::fit_mod(data_list = nrdata,
                                 phase = TRUE))
 
 
+goa_nork_iid <- Rceattle::fit_mod(data_list = nrdata,
+                                  estimateMode = 0,
+                                  random_rec = TRUE,
+                                  msmMode = 0,
+                                  initMode = 2,
+                                  dsem = build_DSEM(
+                                    sem = norkiid,
+                                    family = "normal"
+                                  ),
+                                  M1Fun = build_M1(updateM1 = TRUE,
+                                                   M1_model     = 1,
+                                                   M1_use_prior = TRUE,
+                                                   M_prior      = 0.06,
+                                                   M_prior_sd   = 0.05),
+                                  fit_control = fit_control(
+                                    verbose = 1,
+                                    phase = TRUE))
+
+
 goa_nork_sem <- Rceattle::fit_mod(data_list = nrdata,
                                   estimateMode = 0,
                                   random_rec = TRUE,
@@ -115,6 +147,20 @@ goa_pk <- fit_mod(data_list = pkdata,
                     verbose = 1,
                     phase = TRUE))
 
+
+goa_pk_iid <- fit_mod(data_list = pkdata,
+                       estimateMode = 0,   # Estimate
+                       random_rec = TRUE,
+                       msmMode = 0,        # Single species mode
+                       initMode = 1,
+                       dsem = build_DSEM(
+                         sem = pollockiid,
+                         family = "normal"
+                       ),
+                       fit_control = fit_control(
+                         verbose = 1,
+                         phase = TRUE))
+
 goa_pk_dsem <- fit_mod(data_list = pkdata,
                        estimateMode = 0,   # Estimate
                        random_rec = TRUE,
@@ -139,6 +185,20 @@ goa_cod <- Rceattle::fit_mod(data_list = pcoddata,
                                verbose = 1,
                                phase = TRUE))
 
+
+goa_cod_iid <- Rceattle::fit_mod(data_list = pcoddata,
+                                  inits = NULL, # Initial parameters = 0
+                                  estimateMode = 0, # Estimate
+
+                                  M1Fun        = M1_block,
+                                  dsem = build_DSEM(
+                                    sem = pcodiid,
+                                    family = "normal"
+                                  ),
+                                  random_rec = TRUE,
+                                  fit_control = fit_control(
+                                    verbose = 1,
+                                    phase = TRUE))
 
 goa_cod_dsem <- Rceattle::fit_mod(data_list = pcoddata,
                                   inits = NULL, # Initial parameters = 0
