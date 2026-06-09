@@ -9,6 +9,7 @@ library(dplyr)
 # Load data ----
 source("Setup environmental data.R")
 source("SEMs.R")
+#BF# source("SEMs multimodel.R")
 
 # * Rceattle data ----
 atfdata <- Rceattle::read_data( file = "data/2023_GOA_arrowtooth.xlsx")
@@ -215,6 +216,21 @@ goa_cod_dsem <- Rceattle::fit_mod(data_list = pcoddata,
                                     verbose = 1,
                                     phase = TRUE))
 
+#GOA Cod transport only model
+goa_cod_dsem_tran <- Rceattle::fit_mod(data_list = pcoddata,
+                                  inits = NULL, # Initial parameters = 0
+                                  estimateMode = 0, # Estimate
+
+                                  M1Fun        = M1_block,
+                                  dsem = build_DSEM(
+                                    sem = pcodsem.tran,
+                                    family = "normal"
+                                  ),
+                                  random_rec = TRUE,
+                                  fit_control = fit_control(
+                                    verbose = 1,
+                                    phase = TRUE))
+
 # Summaries ----
 # - ATF
 summ_atf <- summary(goa_atf)$coefficients %>% dplyr::mutate(Model = "Base",
@@ -253,6 +269,10 @@ summ_cod_iid <- summary(goa_cod_iid)$coefficients %>% dplyr::mutate(Model = "IID
                                                                   Species = "Cod")
 summ_cod_sem <- summary(goa_cod_dsem)$coefficients %>% dplyr::mutate(Model = "DSEM",
                                                                    Species = "Cod")
+summ_cod_sem <- summary(goa_cod_dsem_tran)$coefficients %>% dplyr::mutate(Model = "DSEM",
+                                                                     Species = "Cod")
+
+
 results <- do.call("rbind", list(summ_cod, summ_cod_iid, summ_cod_sem))
 write.csv(results, file = "Results/Initial_DSEM_cod.csv")
 
