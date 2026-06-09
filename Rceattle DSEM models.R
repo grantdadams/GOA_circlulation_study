@@ -176,6 +176,45 @@ goa_pk_dsem <- fit_mod(data_list = pkdata,
                          verbose = 1,
                          phase = TRUE))
 
+goa_pk_dsem_tran <- fit_mod(data_list = pkdata,
+                       estimateMode = 0,   # Estimate
+                       random_rec = TRUE,
+                       msmMode = 0,        # Single species mode
+                       initMode = 1,
+                       dsem = build_DSEM(
+                         sem = pollocksem_tran,
+                         family = "normal"
+                       ),
+                       fit_control = fit_control(
+                         verbose = 1,
+                         phase = TRUE))
+
+goa_pk_dsem_prey <- fit_mod(data_list = pkdata,
+                            estimateMode = 0,   # Estimate
+                            random_rec = TRUE,
+                            msmMode = 0,        # Single species mode
+                            initMode = 1,
+                            dsem = build_DSEM(
+                              sem = pollocksem_prey,
+                              family = "normal"
+                            ),
+                            fit_control = fit_control(
+                              verbose = 1,
+                              phase = TRUE))
+
+goa_pk_dsem_hab <- fit_mod(data_list = pkdata,
+                            estimateMode = 0,   # Estimate
+                            random_rec = TRUE,
+                            msmMode = 0,        # Single species mode
+                            initMode = 1,
+                            dsem = build_DSEM(
+                              sem = pollocksem_hab,
+                              family = "normal"
+                            ),
+                            fit_control = fit_control(
+                              verbose = 1,
+                              phase = TRUE))
+
 # * Pcod ----
 goa_cod <- Rceattle::fit_mod(data_list = pcoddata,
                              inits = NULL, # Initial parameters = 0
