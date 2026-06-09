@@ -98,6 +98,64 @@ pollocksem = "
   # --- Recruitment variance ---
   recdevs1 <-> recdevs1,                                0,  sigmaR1,          1
 "
+pollocksem_tran = "
+  # source                  link  target,                    lag param_name        start
+  # ------------------------------------------------------------------------------------
+  # --- GOADI (spring) ---
+  GOADI_spring            ->  Wind_WGOA_spring,         0,  GOADI_to_Wind,    0
+  GOADI_spring            ->  Upwelling_WGOA_spring,    0,  GOADI_to_Up,      0
+
+  # --- NGAO (spring) ---
+  NGAO_spring             ->  Wind_WGOA_spring,         0,  NGAO_to_Wind,     0
+  NGAO_spring             ->  Upwelling_WGOA_spring,    0,  NGAO_to_Up,       0
+
+  # --- Recruitment ---
+  Wind_WGOA_spring        ->  recdevs1,                 1,  Wind_to_R,        0
+  Upwelling_WGOA_spring   ->  recdevs1,                 1,  Up_to_R,          0
+
+  # --- Recruitment variance ---
+  recdevs1 <-> recdevs1,                                0,  sigmaR1,          1
+"
+
+pollocksem_prey = "
+  # source                  link  target,                    lag param_name        start
+  # ------------------------------------------------------------------------------------
+  # --- GOADI (spring) ---
+  GOADI_spring            ->  SST_WGOA_spring,          0,  GOADI_to_SST,     0
+
+  # --- NGAO (spring) ---
+  NGAO_spring             ->  SST_WGOA_spring,          0,  NGAO_to_SST,      0
+  NGAO_spring             ->  Copepods_small_spring,    0,  NGAO_to_Cop,      0
+
+  # --- Intermediaries ---
+  SST_WGOA_spring         ->  Copepods_small_spring,    0,  SST_to_Cop,       0
+
+  # --- Recruitment ---
+  Copepods_small_spring   ->  recdevs1,                 1,  Cop_to_R,         0
+
+  # --- Recruitment variance ---
+  recdevs1 <-> recdevs1,                                0,  sigmaR1,          1
+"
+
+pollocksem_hab = "
+  # source                  link  target,                    lag param_name        start
+  # ------------------------------------------------------------------------------------
+  # --- GOADI (spring) ---
+  GOADI_spring            ->  SST_WGOA_spring,          0,  GOADI_to_SST,     0
+  GOADI_spring            ->  Wind_WGOA_spring,         0,  GOADI_to_Wind,    0
+  GOADI_spring            ->  Upwelling_WGOA_spring,    0,  GOADI_to_Up,      0
+
+  # --- NGAO (spring) ---
+  NGAO_spring             ->  SST_WGOA_spring,          0,  NGAO_to_SST,      0
+  NGAO_spring             ->  Wind_WGOA_spring,         0,  NGAO_to_Wind,     0
+  NGAO_spring             ->  Upwelling_WGOA_spring,    0,  NGAO_to_Up,       0
+
+  # --- Recruitment ---
+  SST_WGOA_spring         ->  recdevs1,                 1,  SST_to_R,         0
+
+  # --- Recruitment variance ---
+  recdevs1 <-> recdevs1,                                0,  sigmaR1,          1
+"
 
 # Pcod ----
 pcodsem.full = "
