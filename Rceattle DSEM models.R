@@ -298,8 +298,14 @@ summ_pk_iid <- summary(goa_pk_iid)$coefficients %>% dplyr::mutate(Model = "IID",
                                                           Species = "Pollock")
 summ_pk_sem <- summary(goa_pk_dsem)$coefficients %>% dplyr::mutate(Model = "DSEM",
                                                                    Species = "Pollock")
-results <- do.call("rbind", list(summ_pk, summ_pk_iid, summ_pk_sem))
-write.csv(results, file = "Results/Initial_DSEM_pk.csv")
+summ_pk_sem_tran <- summary(goa_pk_dsem_tran)$coefficients %>% dplyr::mutate(Model = "DSEM",
+                                                                   Species = "Pollock")
+summ_pk_sem_prey <- summary(goa_pk_dsem_prey)$coefficients %>% dplyr::mutate(Model = "DSEM",
+                                                                   Species = "Pollock")
+summ_pk_sem_hab <- summary(goa_pk_dsem_hab)$coefficients %>% dplyr::mutate(Model = "DSEM",
+                                                                   Species = "Pollock")
+results <- do.call("rbind", list(summ_pk, summ_pk_iid, summ_pk_sem, summ_pk_sem_tran, summ_pk_sem_prey, summ_pk_sem_hab))
+write.csv(results, file = "Results/Multi_DSEM_pk.csv")
 
 # - Cod
 summ_cod <- summary(goa_cod)$coefficients %>% dplyr::mutate(Model = "Base",
@@ -308,11 +314,15 @@ summ_cod_iid <- summary(goa_cod_iid)$coefficients %>% dplyr::mutate(Model = "IID
                                                                   Species = "Cod")
 summ_cod_sem <- summary(goa_cod_dsem)$coefficients %>% dplyr::mutate(Model = "DSEM",
                                                                    Species = "Cod")
-summ_cod_sem <- summary(goa_cod_dsem_tran)$coefficients %>% dplyr::mutate(Model = "DSEM",
+summ_cod_sem_tran <- summary(goa_cod_dsem_tran)$coefficients %>% dplyr::mutate(Model = "DSEM",
                                                                      Species = "Cod")
+summ_cod_sem_prey <- summary(goa_cod_dsem_prey)$coefficients %>% dplyr::mutate(Model = "DSEM",
+                                                                               Species = "Cod")
+summ_cod_sem_hab <- summary(goa_cod_dsem_hab)$coefficients %>% dplyr::mutate(Model = "DSEM",
+                                                                               Species = "Cod")
 
 
-results <- do.call("rbind", list(summ_cod, summ_cod_iid, summ_cod_sem))
+results <- do.call("rbind", list(summ_cod, summ_cod_iid, summ_cod_sem, summ_cod_tran, summ_cod_prey, summ_cod_hab))
 write.csv(results, file = "Results/Initial_DSEM_cod.csv")
 
 
