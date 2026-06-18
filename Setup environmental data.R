@@ -1,5 +1,6 @@
 library(dplyr)
 library(tidyr)
+library(Rceattle)
 
 # Load environmental data ----
 # Reconstruction NGAO labeled pc1) and GOADI (labeled pc2).
@@ -23,12 +24,51 @@ ngao_recon <- read.table("Data/pc1_timeseries.txt") %>%
   dplyr::select(-V1)
 ngao <- rbind(ngao, ngao_recon)
 
-# * Other ----
+
+# * Create seasonal indices ----
+seasons <- data.frame(Season = c("Spring", "Spring",
+                                 "Spring", "Spring", "Spring",
+                                 "Summer", "Summer", "Summer",
+                                 "Summer", "Fall", "Fall",
+                                 "Fall"),
+                      Month = 1:12)
+
+
+# This is currently set it up so winter is associated with age-0
+ngao_annual <- ngao %>%
+  mutate(Month = lubridate::month(Date),
+         Year = lubridate::year(Date),
+         # Year = ifelse(Month == 12, Year + 1, Year) # Set year up one for Dec winter
+  ) %>%
+  full_join(seasons) %>%
+  dplyr::group_by(Year, Season) %>%
+  dplyr::summarise(Index = mean(NGAO)) %>%
+  pivot_wider(names_from = Season, values_from = Index) %>%
+  dplyr::rename(NGAOr_fall = Fall,
+                NGAOr_spring = Spring,
+                NGAOr_summer = Summer)
+
+goadi_annual <- goadi %>%
+  mutate(Month = lubridate::month(Date),
+         Year = lubridate::year(Date),
+         # Year = ifelse(Month == 12, Year + 1, Year) # Set year up one for Dec winter
+  ) %>%
+  full_join(seasons) %>%
+  dplyr::group_by(Year, Season) %>%
+  dplyr::summarise(Index = mean(GOADI)) %>%
+  pivot_wider(names_from = Season, values_from = Index) %>%
+  dplyr::rename(GOADIr_fall = Fall,
+                GOADIr_spring = Spring,
+                GOADIr_summer = Summer)
+
+# * Bridgette Indices ----
 envdata <- read.csv("Data/RecrClimDSEMdata.csv")
 
 envdata  <- envdata %>%
   dplyr::mutate(post2014 = year >= 2014 & year <= 2016) %>%
   dplyr::rename(Year = year) %>%
+  full_join(goadi_annual) %>%
+  full_join(ngao_annual) %>%
   # Rename covariates to intuitive names so the SEMs are easier to read ----
   dplyr::rename(
     NGAO_fall                 = NGAO.OND,
@@ -52,41 +92,7 @@ envdata  <- envdata %>%
     ~ as.numeric(scale(.))
   ))
 
-# Create seasonal indices ----
-seasons <- data.frame(Season = c("Winter", "Winter",
-                                 "Spring", "Spring", "Spring",
-                                 "Summer", "Summer", "Summer",
-                                 "Fall", "Fall", "Fall",
-                                 "Winter"),
-                      Month = 1:12)
 
-
-# This is currently set it up so winter is associated with age-0
-ngao_annual <- ngao %>%
-  mutate(Month = lubridate::month(Date),
-         Year = lubridate::year(Date),
-         Year = ifelse(Month == 12, Year + 1, Year)) %>% # Set year up one for Dec winter
-  full_join(seasons) %>%
-  dplyr::group_by(Year, Season) %>%
-  dplyr::summarise(Index = mean(NGAO)) %>%
-  pivot_wider(names_from = Season, values_from = Index) %>%
-  dplyr::rename(Fall_lagged2_NGAO = Fall,
-                Spring_lagged1_NGAO = Spring,
-                Summer_lagged1_NGAO = Summer,
-                Winter_lagged1_NGAO = Winter)
-
-goadi_annual <- goadi %>%
-  mutate(Month = lubridate::month(Date),
-         Year = lubridate::year(Date),
-         Year = ifelse(Month == 12, Year + 1, Year)) %>% # Set year up one for Dec winter
-  full_join(seasons) %>%
-  dplyr::group_by(Year, Season) %>%
-  dplyr::summarise(Index = mean(GOADI)) %>%
-  pivot_wider(names_from = Season, values_from = Index) %>%
-  dplyr::rename(Fall_lagged2_GOADI = Fall,
-                Spring_lagged1_GOADI = Spring,
-                Summer_lagged1_GOADI = Summer,
-                Winter_lagged1_GOADI = Winter)
 
 
 

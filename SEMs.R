@@ -9,11 +9,11 @@ atfiidsem = "
   # source                  link  target,                    lag param_name        start
   # ------------------------------------------------------------------------------------
   # --- AR1 processes (one per environmental variable) ---
-  GOADI_spring            ->  GOADI_spring,             1,  GOADI_spring_AR1,             0
+  GOADIr_spring            ->  GOADIr_spring,             1,  GOADIr_spring_AR1,             0
   SST_EGOA_spring         ->  SST_EGOA_spring,          1,  SST_EGOA_spring_AR1,          0
   Upwelling_EGOA_spring   ->  Upwelling_EGOA_spring,    1,  Upwelling_EGOA_spring_AR1,    0
   Neocalanus_winterspring ->  Neocalanus_winterspring,  1,  Neocalanus_winterspring_AR1,  0
-  NGAO_spring             ->  NGAO_spring,              1,  NGAO_spring_AR1,              0
+  NGAOr_spring             ->  NGAOr_spring,              1,  NGAOr_spring_AR1,              0
 
   # --- Recruitment variance ---
   recdevs1 <-> recdevs1,                                0,  sigmaR1,          1
@@ -24,15 +24,15 @@ atfdirectsem = "
   # source                  link  target,                    lag param_name        start
   # ------------------------------------------------------------------------------------
   # --- AR1 processes (one per environmental variable) ---
-  GOADI_spring            ->  GOADI_spring,             1,  GOADI_spring_AR1,             0
+  GOADIr_spring            ->  GOADIr_spring,             1,  GOADIr_spring_AR1,             0
   SST_EGOA_spring         ->  SST_EGOA_spring,          1,  SST_EGOA_spring_AR1,          0
   Upwelling_EGOA_spring   ->  Upwelling_EGOA_spring,    1,  Upwelling_EGOA_spring_AR1,    0
   Neocalanus_winterspring ->  Neocalanus_winterspring,  1,  Neocalanus_winterspring_AR1,  0
-  NGAO_spring             ->  NGAO_spring,              1,  NGAO_spring_AR1,              0
+  NGAOr_spring             ->  NGAOr_spring,              1,  NGAOr_spring_AR1,              0
 
   # --- Recruitment ---
-  NGAO_spring             ->  recdevs1,                 1,  NGAO_to_R,        0
-  GOADI_spring            ->  recdevs1,                 1,  GOADI_to_R,       0
+  NGAOr_spring             ->  recdevs1,                 1,  NGAO_to_R,        0
+  GOADIr_spring            ->  recdevs1,                 1,  GOADI_to_R,       0
 
   # --- Recruitment variance ---
   recdevs1 <-> recdevs1,                                0,  sigmaR1,          1
@@ -43,21 +43,21 @@ atfsem = "
   # source                  link  target,                    lag param_name        start
   # ------------------------------------------------------------------------------------
   # --- AR1 processes (one per environmental variable) ---
-  GOADI_spring            ->  GOADI_spring,             1,  GOADI_spring_AR1,             0
+  GOADIr_spring            ->  GOADIr_spring,             1,  GOADIr_spring_AR1,             0
   SST_EGOA_spring         ->  SST_EGOA_spring,          1,  SST_EGOA_spring_AR1,          0
   Upwelling_EGOA_spring   ->  Upwelling_EGOA_spring,    1,  Upwelling_EGOA_spring_AR1,    0
   Neocalanus_winterspring ->  Neocalanus_winterspring,  1,  Neocalanus_winterspring_AR1,  0
-  NGAO_spring             ->  NGAO_spring,              1,  NGAO_spring_AR1,              0
+  NGAOr_spring             ->  NGAOr_spring,              1,  NGAOr_spring_AR1,              0
 
   # --- GOADI (spring) ---
-  GOADI_spring            ->  SST_EGOA_spring,          0,  GOADI_to_eSST,    0
-  GOADI_spring            ->  Upwelling_EGOA_spring,    0,  GOADI_to_Up,      0
-  GOADI_spring            ->  Neocalanus_winterspring,  0,  GOADI_to_Cal,     0
+  GOADIr_spring            ->  SST_EGOA_spring,          0,  GOADI_to_eSST,    0
+  GOADIr_spring            ->  Upwelling_EGOA_spring,    0,  GOADI_to_Up,      0
+  GOADIr_spring            ->  Neocalanus_winterspring,  0,  GOADI_to_Cal,     0
 
   # --- NGAO (spring) ---
-  NGAO_spring             ->  SST_EGOA_spring,          0,  NGAO_to_eSST,     0
-  NGAO_spring             ->  Upwelling_EGOA_spring,    0,  NGAO_to_Up,       0
-  NGAO_spring             ->  Neocalanus_winterspring,  0,  NGAO_to_Cal,      0
+  NGAOr_spring             ->  SST_EGOA_spring,          0,  NGAO_to_eSST,     0
+  NGAOr_spring             ->  Upwelling_EGOA_spring,    0,  NGAO_to_Up,       0
+  NGAOr_spring             ->  Neocalanus_winterspring,  0,  NGAO_to_Cal,      0
 
   # --- Intermediaries ---
   SST_EGOA_spring         ->  Neocalanus_winterspring,  0,  SST_to_Cal,       0
@@ -66,8 +66,8 @@ atfsem = "
   SST_EGOA_spring         ->  recdevs1,                 1,  eSST_to_R,        0
   Upwelling_EGOA_spring   ->  recdevs1,                 1,  Up_to_R,          0
   Neocalanus_winterspring ->  recdevs1,                 1,  Cal_to_R,         0
-  NGAO_spring             ->  recdevs1,                 1,  NGAO_to_R,        0
-  GOADI_spring            ->  recdevs1,                 1,  GOADI_to_R,       0
+  NGAOr_spring             ->  recdevs1,                 1,  NGAO_to_R,        0
+  GOADIr_spring            ->  recdevs1,                 1,  GOADI_to_R,       0
 
   # --- Recruitment variance ---
   recdevs1 <-> recdevs1,                                0,  sigmaR1,          1
@@ -79,13 +79,13 @@ norkiidsem = "
   # source                  link  target,                    lag param_name        start
   # ------------------------------------------------------------------------------------
   # --- AR1 processes (one per environmental variable) ---
-  GOADI_spring            ->  GOADI_spring,             1,  GOADI_spring_AR1,             0
+  GOADIr_spring            ->  GOADIr_spring,             1,  GOADIr_spring_AR1,             0
   SST_EGOA_spring         ->  SST_EGOA_spring,          1,  SST_EGOA_spring_AR1,          0
   Neocalanus_winterspring ->  Neocalanus_winterspring,  1,  Neocalanus_winterspring_AR1,  0
   Upwelling_EGOA_spring   ->  Upwelling_EGOA_spring,    1,  Upwelling_EGOA_spring_AR1,    0
-  NGAO_spring             ->  NGAO_spring,              1,  NGAO_spring_AR1,              0
-  NGAO_fall               ->  NGAO_fall,                1,  NGAO_fall_AR1,                0
-  GOADI_fall              ->  GOADI_fall,               1,  GOADI_fall_AR1,               0
+  NGAOr_spring             ->  NGAOr_spring,              1,  NGAOr_spring_AR1,              0
+  NGAOr_fall               ->  NGAOr_fall,                1,  NGAOr_fall_AR1,                0
+  GOADIr_fall              ->  GOADIr_fall,               1,  GOADIr_fall_AR1,               0
 
   # --- Recruitment variance ---
   recdevs1 <-> recdevs1,                                0,  sigmaR1,          1
@@ -96,21 +96,21 @@ norkdirectsem = "
   # source                  link  target,                    lag param_name        start
   # ------------------------------------------------------------------------------------
   # --- AR1 processes (one per environmental variable) ---
-  GOADI_spring            ->  GOADI_spring,             1,  GOADI_spring_AR1,             0
+  GOADIr_spring            ->  GOADIr_spring,             1,  GOADIr_spring_AR1,             0
   SST_EGOA_spring         ->  SST_EGOA_spring,          1,  SST_EGOA_spring_AR1,          0
   Neocalanus_winterspring ->  Neocalanus_winterspring,  1,  Neocalanus_winterspring_AR1,  0
   Upwelling_EGOA_spring   ->  Upwelling_EGOA_spring,    1,  Upwelling_EGOA_spring_AR1,    0
-  NGAO_spring             ->  NGAO_spring,              1,  NGAO_spring_AR1,              0
-  NGAO_fall               ->  NGAO_fall,                1,  NGAO_fall_AR1,                0
-  GOADI_fall              ->  GOADI_fall,               1,  GOADI_fall_AR1,               0
+  NGAOr_spring             ->  NGAOr_spring,              1,  NGAOr_spring_AR1,              0
+  NGAOr_fall               ->  NGAOr_fall,                1,  NGAOr_fall_AR1,                0
+  GOADIr_fall              ->  GOADIr_fall,               1,  GOADIr_fall_AR1,               0
 
   # --- Recruitment ---
-  NGAO_spring             ->  recdevs1,                 2,  NGAO_to_R,        0
-  GOADI_spring            ->  recdevs1,                 2,  GOADI_to_R,       0
+  NGAOr_spring             ->  recdevs1,                 2,  NGAO_to_R,        0
+  GOADIr_spring            ->  recdevs1,                 2,  GOADI_to_R,       0
 
   # --- Fall drivers (lag 2) ---
-  NGAO_fall               ->  recdevs1,                 3,  fallNGAO_to_R,    0
-  GOADI_fall              ->  recdevs1,                 3,  fallGOADI_to_R,   0
+  NGAOr_fall               ->  recdevs1,                 3,  fallNGAO_to_R,    0
+  GOADIr_fall              ->  recdevs1,                 3,  fallGOADI_to_R,   0
 
   # --- Recruitment variance ---
   recdevs1 <-> recdevs1,                                0,  sigmaR1,          1
@@ -121,23 +121,23 @@ norksem = "
   # source                  link  target,                    lag param_name        start
   # ------------------------------------------------------------------------------------
   # --- AR1 processes (one per environmental variable) ---
-  GOADI_spring            ->  GOADI_spring,             1,  GOADI_spring_AR1,             0
+  GOADIr_spring            ->  GOADIr_spring,             1,  GOADIr_spring_AR1,             0
   SST_EGOA_spring         ->  SST_EGOA_spring,          1,  SST_EGOA_spring_AR1,          0
   Neocalanus_winterspring ->  Neocalanus_winterspring,  1,  Neocalanus_winterspring_AR1,  0
   Upwelling_EGOA_spring   ->  Upwelling_EGOA_spring,    1,  Upwelling_EGOA_spring_AR1,    0
-  NGAO_spring             ->  NGAO_spring,              1,  NGAO_spring_AR1,              0
-  NGAO_fall               ->  NGAO_fall,                1,  NGAO_fall_AR1,                0
-  GOADI_fall              ->  GOADI_fall,               1,  GOADI_fall_AR1,               0
+  NGAOr_spring             ->  NGAOr_spring,              1,  NGAOr_spring_AR1,              0
+  NGAOr_fall               ->  NGAOr_fall,                1,  NGAOr_fall_AR1,                0
+  GOADIr_fall              ->  GOADIr_fall,               1,  GOADIr_fall_AR1,               0
 
   # --- GOADI (spring) ---
-  GOADI_spring            ->  SST_EGOA_spring,          0,  GOADI_to_SST,     0
-  GOADI_spring            ->  Neocalanus_winterspring,  0,  GOADI_to_Cal,     0
-  GOADI_spring            ->  Upwelling_EGOA_spring,    0,  GOADI_to_Up,      0
+  GOADIr_spring            ->  SST_EGOA_spring,          0,  GOADI_to_SST,     0
+  GOADIr_spring            ->  Neocalanus_winterspring,  0,  GOADI_to_Cal,     0
+  GOADIr_spring            ->  Upwelling_EGOA_spring,    0,  GOADI_to_Up,      0
 
   # --- NGAO (spring) ---
-  NGAO_spring             ->  SST_EGOA_spring,          0,  NGAO_to_SST,      0
-  NGAO_spring             ->  Neocalanus_winterspring,  0,  NGAO_to_Cal,      0
-  NGAO_spring             ->  Upwelling_EGOA_spring,    0,  NGAO_to_Up,       0
+  NGAOr_spring             ->  SST_EGOA_spring,          0,  NGAO_to_SST,      0
+  NGAOr_spring             ->  Neocalanus_winterspring,  0,  NGAO_to_Cal,      0
+  NGAOr_spring             ->  Upwelling_EGOA_spring,    0,  NGAO_to_Up,       0
 
   # --- Intermediaries ---
   SST_EGOA_spring         ->  Neocalanus_winterspring,  0,  SST_to_Cal,       0
@@ -146,12 +146,12 @@ norksem = "
   SST_EGOA_spring         ->  recdevs1,                 2,  eSST_to_R,        0
   Upwelling_EGOA_spring   ->  recdevs1,                 2,  Up_to_R,          0
   Neocalanus_winterspring ->  recdevs1,                 2,  Cal_to_R,         0
-  NGAO_spring             ->  recdevs1,                 2,  NGAO_to_R,        0
-  GOADI_spring            ->  recdevs1,                 2,  GOADI_to_R,       0
+  NGAOr_spring             ->  recdevs1,                 2,  NGAO_to_R,        0
+  GOADIr_spring            ->  recdevs1,                 2,  GOADI_to_R,       0
 
   # --- Fall drivers (lag 2) ---
-  NGAO_fall               ->  recdevs1,                 3,  fallNGAO_to_R,    0
-  GOADI_fall              ->  recdevs1,                 3,  fallGOADI_to_R,   0
+  NGAOr_fall               ->  recdevs1,                 3,  fallNGAO_to_R,    0
+  GOADIr_fall              ->  recdevs1,                 3,  fallGOADI_to_R,   0
 
   # --- Recruitment variance ---
   recdevs1 <-> recdevs1,                                0,  sigmaR1,          1

@@ -1,6 +1,7 @@
 # Use outline to navigate
 
 # Libraries ----
+# remotes::install_version("dsem", version = "2.0.1") # Need this version
 # remotes::install_github("grantdadams/Rceattle@dev-DSEM")
 library(Rceattle) # dev-DSEM
 library(dplyr)
@@ -35,6 +36,7 @@ atfdata$projyr <- atfdata$endyr
 nrdata$projyr <- nrdata$endyr
 pcoddata$projyr <- pcoddata$endyr
 pkdata$projyr <- pkdata$endyr
+
 
 # Fit models ----
 # * Arrowtooth ----
