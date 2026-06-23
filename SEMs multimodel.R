@@ -37,6 +37,64 @@ atfsem = "
   recdevs1 <-> recdevs1,                                0,  sigmaR1,          1
 "
 
+atfsem_tran = "
+  # source                  link  target,                    lag param_name        start
+  # ------------------------------------------------------------------------------------
+  # --- GOADI (spring) ---
+  GOADI_spring            ->  Upwelling_EGOA_spring,    0,  GOADI_to_Up,      0
+
+  # --- NGAO (spring) ---
+  NGAO_spring             ->  Upwelling_EGOA_spring,    0,  NGAO_to_Up,       0
+
+  # --- Recruitment ---
+  Upwelling_EGOA_spring   ->  recdevs1,                 1,  Up_to_R,          0
+
+  # --- Recruitment variance ---
+  recdevs1 <-> recdevs1,                                0,  sigmaR1,          1
+"
+
+atfsem_prey = "
+  # source                  link  target,                    lag param_name        start
+  # ------------------------------------------------------------------------------------
+  # --- GOADI (spring) ---
+  GOADI_spring            ->  SST_EGOA_spring,          0,  GOADI_to_eSST,    0
+  GOADI_spring            ->  Neocalanus_winterspring,  0,  GOADI_to_Cal,     0
+
+  # --- NGAO (spring) ---
+  NGAO_spring             ->  SST_EGOA_spring,          0,  NGAO_to_eSST,     0
+  NGAO_spring             ->  Neocalanus_winterspring,  0,  NGAO_to_Cal,      0
+
+  # --- Intermediaries ---
+  SST_EGOA_spring         ->  Neocalanus_winterspring,  0,  SST_to_Cal,       0
+
+  # --- Recruitment ---
+  Neocalanus_winterspring ->  recdevs1,                 1,  Cal_to_R,         0
+
+  # --- Recruitment variance ---
+  recdevs1 <-> recdevs1,                                0,  sigmaR1,          1
+"
+atfsem_hab = "
+  # source                  link  target,                    lag param_name        start
+  # ------------------------------------------------------------------------------------
+  # --- GOADI (spring) ---
+  GOADI_spring            ->  SST_EGOA_spring,          0,  GOADI_to_eSST,    0
+  GOADI_spring            ->  Upwelling_EGOA_spring,    0,  GOADI_to_Up,      0
+
+  # --- NGAO (spring) ---
+  NGAO_spring             ->  SST_EGOA_spring,          0,  NGAO_to_eSST,     0
+  NGAO_spring             ->  Upwelling_EGOA_spring,    0,  NGAO_to_Up,       0
+
+  # --- Recruitment ---
+  SST_EGOA_spring         ->  recdevs1,                 1,  eSST_to_R,        0
+  Upwelling_EGOA_spring   ->  recdevs1,                 1,  Up_to_R,          0
+  NGAO_spring             ->  recdevs1,                 1,  NGAO_to_R,        0
+  GOADI_spring            ->  recdevs1,                 1,  GOADI_to_R,       0
+
+  # --- Recruitment variance ---
+  recdevs1 <-> recdevs1,                                0,  sigmaR1,          1
+"
+
+
 # Northern rockfish ----
 norksem = "
   # source                  link  target,                    lag param_name        start
@@ -68,6 +126,73 @@ norksem = "
   # --- Recruitment variance ---
   recdevs1 <-> recdevs1,                                0,  sigmaR1,          1
 "
+
+norksem_tran = "
+  # source                  link  target,                    lag param_name        start
+  # ------------------------------------------------------------------------------------
+  # --- GOADI (spring) ---
+  GOADI_spring            ->  Upwelling_EGOA_spring,    0,  GOADI_to_Up,      0
+
+  # --- NGAO (spring) ---
+  NGAO_spring             ->  Upwelling_EGOA_spring,    0,  NGAO_to_Up,       0
+
+  # --- Recruitment ---
+  Upwelling_EGOA_spring   ->  recdevs1,                 1,  Up_to_R,          0
+
+  # --- Recruitment variance ---
+  recdevs1 <-> recdevs1,                                0,  sigmaR1,          1
+"
+
+norksem_prey = "
+  # source                  link  target,                    lag param_name        start
+  # ------------------------------------------------------------------------------------
+  # --- GOADI (spring) ---
+  GOADI_spring            ->  SST_EGOA_spring,          0,  GOADI_to_SST,     0
+  GOADI_spring            ->  Neocalanus_winterspring,  0,  GOADI_to_Cal,     0
+
+  # --- NGAO (spring) ---
+  NGAO_spring             ->  SST_EGOA_spring,          0,  NGAO_to_SST,      0
+  NGAO_spring             ->  Neocalanus_winterspring,  0,  NGAO_to_Cal,      0
+
+  # --- Intermediaries ---
+  SST_EGOA_spring         ->  Neocalanus_winterspring,  0,  SST_to_Cal,       0
+
+  # --- Recruitment ---
+  Neocalanus_winterspring ->  recdevs1,                 1,  Cal_to_R,         0
+
+  # --- Fall drivers (lag 2) ---
+  NGAO_fall               ->  recdevs1,                 2,  fallNGAO_to_R,    0
+  GOADI_fall              ->  recdevs1,                 2,  fallGOADI_to_R,   0
+
+  # --- Recruitment variance ---
+  recdevs1 <-> recdevs1,                                0,  sigmaR1,          1
+"
+
+norksem_hab = "
+  # source                  link  target,                    lag param_name        start
+  # ------------------------------------------------------------------------------------
+  # --- GOADI (spring) ---
+  GOADI_spring            ->  SST_EGOA_spring,          0,  GOADI_to_SST,     0
+  GOADI_spring            ->  Upwelling_EGOA_spring,    0,  GOADI_to_Up,      0
+
+  # --- NGAO (spring) ---
+  NGAO_spring             ->  SST_EGOA_spring,          0,  NGAO_to_SST,      0
+  NGAO_spring             ->  Upwelling_EGOA_spring,    0,  NGAO_to_Up,       0
+
+  # --- Recruitment ---
+  SST_EGOA_spring         ->  recdevs1,                 1,  eSST_to_R,        0
+  Upwelling_EGOA_spring   ->  recdevs1,                 1,  Up_to_R,          0
+  NGAO_spring             ->  recdevs1,                 1,  NGAO_to_R,        0
+  GOADI_spring            ->  recdevs1,                 1,  GOADI_to_R,       0
+
+  # --- Fall drivers (lag 2) ---
+  NGAO_fall               ->  recdevs1,                 2,  fallNGAO_to_R,    0
+  GOADI_fall              ->  recdevs1,                 2,  fallGOADI_to_R,   0
+
+  # --- Recruitment variance ---
+  recdevs1 <-> recdevs1,                                0,  sigmaR1,          1
+"
+
 
 # Pollock ----
 pollocksem = "
@@ -158,7 +283,7 @@ pollocksem_hab = "
 "
 
 # Pcod ----
-pcodsem.full = "
+pcodsem = "
   # source                  link  target,                    lag param_name        start
   # ------------------------------------------------------------------------------------
   # --- GOADI (spring) ---
@@ -187,7 +312,7 @@ pcodsem.full = "
   # --- Recruitment variance ---
   recdevs1 <-> recdevs1,                                0,  sigmaR1,          1
 "
-pcodsem.tran = "
+pcodsem_tran = "
   # source                  link  target,                    lag param_name        start
   # ------------------------------------------------------------------------------------
   # --- GOADI (spring) --
@@ -203,7 +328,7 @@ pcodsem.tran = "
   recdevs1 <-> recdevs1,                                0,  sigmaR1,          1
 "
 
-pcodsem.prey = "
+pcodsem_prey = "
   # source                  link  target,                    lag param_name        start
   # ------------------------------------------------------------------------------------
   # --- GOADI (spring) ---
@@ -223,7 +348,7 @@ pcodsem.prey = "
   recdevs1 <-> recdevs1,                                0,  sigmaR1,          1
 "
 
-pcodsem.hab = "
+pcodsem_hab = "
   # source                  link  target,                    lag param_name        start
   # ------------------------------------------------------------------------------------
   # --- GOADI (spring) ---
