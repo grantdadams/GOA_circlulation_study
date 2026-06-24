@@ -19,16 +19,24 @@ nrdata <- Rceattle::read_data(file = "Data/2024_GOA_northern_rockfish.xlsx")
 
 # * Combine stock and environmental data ----
 atfdata$env_data <- atfdata$env_data %>%
-  full_join(envdata)
+  select(Year, BTempC) %>%
+  full_join(envdata, by = "Year") %>%
+  arrange(Year)
 
 pkdata$env_data <- pkdata$env_data %>%
-  full_join(envdata)
+  select(Year, QcovPol) %>%
+  full_join(envdata, by = "Year") %>%
+  arrange(Year)
 
 pcoddata$env_data <- pcoddata$env_data %>%
-  full_join(envdata)
+  select(Year, CFSR_2022) %>%
+  full_join(envdata, by = "Year") %>%
+  arrange(Year)
 
 nrdata$env_data <- nrdata$env_data %>%
-  full_join(envdata)
+  select(Year, Temp, StartDateDev, Interaction) %>%
+  full_join(envdata, by = "Year") %>%
+  arrange(Year)
 
 plot_data(nrdata)
 
