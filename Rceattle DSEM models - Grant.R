@@ -47,7 +47,8 @@ atf_iid_mod <- Rceattle::fit_mod(data_list = atfdata,
                              random_rec = TRUE,
                              dsem = build_DSEM(
                                sem = atfiidsem,
-                               family = "fixed", sigmaR_prior_sd = 0.5
+                               family = "fixed",
+                               sigmaR_prior_sd = 0.5
                              ),
                              msmMode = 0, # Single species mode
                              initMode = 1,
@@ -62,7 +63,8 @@ atf_direct_mod <- Rceattle::fit_mod(data_list = atfdata,
                                  random_rec = TRUE,
                                  dsem = build_DSEM(
                                    sem = atfdirectsem,
-                                   family = "fixed", sigmaR_prior_sd = 0.5
+                                   family = "fixed",
+                                   sigmaR_prior_sd = 0.5
                                  ),
                                  msmMode = 0, # Single species mode
                                  initMode = 1,
@@ -77,7 +79,8 @@ atf_full_mod <- Rceattle::fit_mod(data_list = atfdata,
                                  random_rec = TRUE,
                                  dsem = build_DSEM(
                                    sem = atfsem,
-                                   family = "fixed", sigmaR_prior_sd = 0.5
+                                   family = "fixed",
+                                   sigmaR_prior_sd = 0.5
                                  ),
                                  msmMode = 0, # Single species mode
                                  initMode = 1,
@@ -98,7 +101,8 @@ nork_iid_mod <- Rceattle::fit_mod(data_list = nrdata,
                               initMode = 2,
                               dsem = build_DSEM(
                                 sem = norkiidsem,
-                                family = "fixed", sigmaR_prior_sd = 0.5
+                                family = "fixed",
+                                sigmaR_prior_sd = 0.5
                               ),
                               M1Fun = build_M1(updateM1 = TRUE,
                                                M1_model     = 1,
@@ -117,7 +121,8 @@ nork_direct_mod <- Rceattle::fit_mod(data_list = nrdata,
                                   initMode = 2,
                                   dsem = build_DSEM(
                                     sem = norkdirectsem,
-                                    family = "fixed", sigmaR_prior_sd = 0.5
+                                    family = "fixed",
+                                    sigmaR_prior_sd = 0.5
                                   ),
                                   M1Fun = build_M1(updateM1 = TRUE,
                                                    M1_model     = 1,
@@ -136,7 +141,8 @@ nork_full_mod <- Rceattle::fit_mod(data_list = nrdata,
                                   initMode = 2,
                                   dsem = build_DSEM(
                                     sem = norksem,
-                                    family = "fixed", sigmaR_prior_sd = 0.5
+                                    family = "fixed",
+                                    sigmaR_prior_sd = 0.5
                                   ),
                                   M1Fun = build_M1(updateM1 = TRUE,
                                                    M1_model     = 1,
@@ -170,7 +176,8 @@ pk_direct_mod <- fit_mod(data_list = pkdata,
                        initMode = 1,
                        dsem = build_DSEM(
                          sem = pollockdirectsem,
-                         family = "fixed", sigmaR_prior_sd = 0.5
+                         family = "fixed",
+                         sigmaR_prior_sd = 0.5
                        ),
                        fit_control = fit_control(
                          verbose = 1,
@@ -183,7 +190,8 @@ pk_full_mod <- fit_mod(data_list = pkdata,
                        initMode = 1,
                        dsem = build_DSEM(
                          sem = pollocksem,
-                         family = "fixed", sigmaR_prior_sd = 0.5
+                         family = "fixed",
+                         sigmaR_prior_sd = 0.5
                        ),
                        fit_control = fit_control(
                          verbose = 1,
@@ -197,7 +205,8 @@ cod_iid_mod <- Rceattle::fit_mod(data_list = pcoddata,
                              M1Fun        = M1_block,
                              dsem = build_DSEM(
                                sem = pcodiidsem,
-                               family = "fixed", sigmaR_prior_sd = 0.5
+                               family = "fixed",
+                               sigmaR_prior_sd = 0.5
                              ),
                              random_rec = TRUE,
                              fit_control = fit_control(
@@ -212,7 +221,8 @@ cod_direct_mod <- Rceattle::fit_mod(data_list = pcoddata,
                                   M1Fun        = M1_block,
                                   dsem = build_DSEM(
                                     sem = pcoddirectsem,
-                                    family = "fixed", sigmaR_prior_sd = 0.5
+                                    family = "fixed",
+                                    sigmaR_prior_sd = 0.5
                                   ),
                                   random_rec = TRUE,
                                   fit_control = fit_control(
@@ -226,7 +236,8 @@ cod_full_mod <- Rceattle::fit_mod(data_list = pcoddata,
                                   M1Fun        = M1_block,
                                   dsem = build_DSEM(
                                     sem = pcodsem,
-                                    family = "fixed", sigmaR_prior_sd = 0.5
+                                    family = "fixed",
+                                    sigmaR_prior_sd = 0.5
                                   ),
                                   random_rec = TRUE,
                                   fit_control = fit_control(
