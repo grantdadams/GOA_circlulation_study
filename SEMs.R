@@ -31,8 +31,8 @@ atfdirectsem = "
   NGAOr_spring            ->  NGAOr_spring,             1,  NGAOr_spring_AR1,             0
 
   # --- Recruitment ---
-  NGAOr_spring             ->  recdevs1,                 1,  NGAO_to_R,        0
-  GOADIr_spring            ->  recdevs1,                 1,  GOADI_to_R,       0
+  NGAOr_spring             ->  recdevs1,                 1,  NGAOr_to_R,        0
+  GOADIr_spring            ->  recdevs1,                 1,  GOADIr_to_R,       0
 
   # --- Recruitment variance ---
   recdevs1 <-> recdevs1,                                0,  sigmaR1,          1
@@ -50,14 +50,14 @@ atfsem = "
   NGAOr_spring            ->  NGAOr_spring,             1,  NGAOr_spring_AR1,             0
 
   # --- GOADI (spring) ---
-  GOADIr_spring            ->  SST_EGOA_spring,          0,  GOADI_to_eSST,    0
-  GOADIr_spring            ->  Upwelling_EGOA_spring,    0,  GOADI_to_Up,      0
-  GOADIr_spring            ->  Neocalanus_winterspring,  0,  GOADI_to_Cal,     0
+  GOADIr_spring            ->  SST_EGOA_spring,          0,  GOADIr_to_eSST,    0
+  GOADIr_spring            ->  Upwelling_EGOA_spring,    0,  GOADIr_to_Up,      0
+  GOADIr_spring            ->  Neocalanus_winterspring,  0,  GOADIr_to_Cal,     0
 
   # --- NGAO (spring) ---
-  NGAOr_spring             ->  SST_EGOA_spring,          0,  NGAO_to_eSST,     0
-  NGAOr_spring             ->  Upwelling_EGOA_spring,    0,  NGAO_to_Up,       0
-  NGAOr_spring             ->  Neocalanus_winterspring,  0,  NGAO_to_Cal,      0
+  NGAOr_spring             ->  SST_EGOA_spring,          0,  NGAOr_to_eSST,     0
+  NGAOr_spring             ->  Upwelling_EGOA_spring,    0,  NGAOr_to_Up,       0
+  NGAOr_spring             ->  Neocalanus_winterspring,  0,  NGAOr_to_Cal,      0
 
   # --- Intermediaries ---
   SST_EGOA_spring         ->  Neocalanus_winterspring,  0,  SST_to_Cal,       0
@@ -66,8 +66,8 @@ atfsem = "
   SST_EGOA_spring         ->  recdevs1,                 1,  eSST_to_R,        0
   Upwelling_EGOA_spring   ->  recdevs1,                 1,  Up_to_R,          0
   Neocalanus_winterspring ->  recdevs1,                 1,  Cal_to_R,         0
-  NGAOr_spring             ->  recdevs1,                 1,  NGAO_to_R,        0
-  GOADIr_spring            ->  recdevs1,                 1,  GOADI_to_R,       0
+  NGAOr_spring             ->  recdevs1,                 1,  NGAOr_to_R,        0
+  GOADIr_spring            ->  recdevs1,                 1,  GOADIr_to_R,       0
 
   # --- Recruitment variance ---
   recdevs1 <-> recdevs1,                                0,  sigmaR1,          1
@@ -105,12 +105,12 @@ norkdirectsem = "
   GOADIr_fall              ->  GOADIr_fall,             1,  GOADIr_fall_AR1,              0
 
   # --- Recruitment ---
-  NGAOr_spring             ->  recdevs1,                 2,  NGAO_to_R,        0
-  GOADIr_spring            ->  recdevs1,                 2,  GOADI_to_R,       0
+  NGAOr_spring             ->  recdevs1,                 2,  NGAOr_to_R,        0
+  GOADIr_spring            ->  recdevs1,                 2,  GOADIr_to_R,       0
 
   # --- Fall drivers (lag 2) ---
-  NGAOr_fall               ->  recdevs1,                 3,  fallNGAO_to_R,    0
-  GOADIr_fall              ->  recdevs1,                 3,  fallGOADI_to_R,   0
+  NGAOr_fall               ->  recdevs1,                 3,  fallNGAOr_to_R,    0
+  GOADIr_fall              ->  recdevs1,                 3,  fallGOADIr_to_R,   0
 
   # --- Recruitment variance ---
   recdevs1 <-> recdevs1,                                0,  sigmaR1,          1
@@ -130,14 +130,14 @@ norksem = "
   GOADIr_fall              ->  GOADIr_fall,             1,  GOADIr_fall_AR1,              0
 
   # --- GOADI (spring) ---
-  GOADIr_spring            ->  SST_EGOA_spring,          0,  GOADI_to_SST,     0
-  GOADIr_spring            ->  Neocalanus_winterspring,  0,  GOADI_to_Cal,     0
-  GOADIr_spring            ->  Upwelling_EGOA_spring,    0,  GOADI_to_Up,      0
+  GOADIr_spring            ->  SST_EGOA_spring,          0,  GOADIr_to_SST,     0
+  GOADIr_spring            ->  Neocalanus_winterspring,  0,  GOADIr_to_Cal,     0
+  GOADIr_spring            ->  Upwelling_EGOA_spring,    0,  GOADIr_to_Up,      0
 
   # --- NGAO (spring) ---
-  NGAOr_spring             ->  SST_EGOA_spring,          0,  NGAO_to_SST,      0
-  NGAOr_spring             ->  Neocalanus_winterspring,  0,  NGAO_to_Cal,      0
-  NGAOr_spring             ->  Upwelling_EGOA_spring,    0,  NGAO_to_Up,       0
+  NGAOr_spring             ->  SST_EGOA_spring,          0,  NGAOr_to_SST,      0
+  NGAOr_spring             ->  Neocalanus_winterspring,  0,  NGAOr_to_Cal,      0
+  NGAOr_spring             ->  Upwelling_EGOA_spring,    0,  NGAOr_to_Up,       0
 
   # --- Intermediaries ---
   SST_EGOA_spring         ->  Neocalanus_winterspring,  0,  SST_to_Cal,       0
@@ -146,12 +146,12 @@ norksem = "
   SST_EGOA_spring         ->  recdevs1,                 2,  eSST_to_R,        0
   Upwelling_EGOA_spring   ->  recdevs1,                 2,  Up_to_R,          0
   Neocalanus_winterspring ->  recdevs1,                 2,  Cal_to_R,         0
-  NGAOr_spring             ->  recdevs1,                 2,  NGAO_to_R,        0
-  GOADIr_spring            ->  recdevs1,                 2,  GOADI_to_R,       0
+  NGAOr_spring             ->  recdevs1,                 2,  NGAOr_to_R,        0
+  GOADIr_spring            ->  recdevs1,                 2,  GOADIr_to_R,       0
 
   # --- Fall drivers (lag 2) ---
-  NGAOr_fall               ->  recdevs1,                 3,  fallNGAO_to_R,    0
-  GOADIr_fall              ->  recdevs1,                 3,  fallGOADI_to_R,   0
+  NGAOr_fall               ->  recdevs1,                 3,  fallNGAOr_to_R,    0
+  GOADIr_fall              ->  recdevs1,                 3,  fallGOADIr_to_R,   0
 
   # --- Recruitment variance ---
   recdevs1 <-> recdevs1,                                0,  sigmaR1,          1
@@ -163,11 +163,11 @@ pollockiidsem = "
   # source                  link  target,                    lag param_name        start
   # ------------------------------------------------------------------------------------
   # --- AR1 processes (one per environmental variable) ---
-  GOADI_spring            ->  GOADI_spring,             1,  GOADI_spring_AR1,             0
+  GOADIr_spring            ->  GOADIr_spring,             1,  GOADIr_spring_AR1,             0
   SST_WGOA_spring         ->  SST_WGOA_spring,          1,  SST_WGOA_spring_AR1,          0
   Wind_WGOA_spring        ->  Wind_WGOA_spring,         1,  Wind_WGOA_spring_AR1,         0
   Upwelling_WGOA_spring   ->  Upwelling_WGOA_spring,    1,  Upwelling_WGOA_spring_AR1,    0
-  NGAO_spring             ->  NGAO_spring,              1,  NGAO_spring_AR1,              0
+  NGAOr_spring             ->  NGAOr_spring,              1,  NGAOr_spring_AR1,              0
   Copepods_small_spring   ->  Copepods_small_spring,    1,  Copepods_small_spring_AR1,    0
 
   # --- Recruitment variance ---
@@ -179,16 +179,16 @@ pollockdirectsem = "
   # source                  link  target,                    lag param_name        start
   # ------------------------------------------------------------------------------------
   # --- AR1 processes (one per environmental variable) ---
-  GOADI_spring            ->  GOADI_spring,             1,  GOADI_spring_AR1,             0
+  GOADIr_spring            ->  GOADIr_spring,             1,  GOADIr_spring_AR1,             0
   SST_WGOA_spring         ->  SST_WGOA_spring,          1,  SST_WGOA_spring_AR1,          0
   Wind_WGOA_spring        ->  Wind_WGOA_spring,         1,  Wind_WGOA_spring_AR1,         0
   Upwelling_WGOA_spring   ->  Upwelling_WGOA_spring,    1,  Upwelling_WGOA_spring_AR1,    0
-  NGAO_spring             ->  NGAO_spring,              1,  NGAO_spring_AR1,              0
+  NGAOr_spring             ->  NGAOr_spring,              1,  NGAOr_spring_AR1,              0
   Copepods_small_spring   ->  Copepods_small_spring,    1,  Copepods_small_spring_AR1,    0
 
   # --- Recruitment ---
-  NGAO_spring             ->  recdevs1,                 1,  NGAO_to_R,        0
-  GOADI_spring            ->  recdevs1,                 1,  GOADI_to_R,       0
+  NGAOr_spring             ->  recdevs1,                 1,  NGAOr_to_R,        0
+  GOADIr_spring            ->  recdevs1,                 1,  GOADIr_to_R,       0
 
   # --- Recruitment variance ---
   recdevs1 <-> recdevs1,                                0,  sigmaR1,          1
@@ -199,23 +199,23 @@ pollocksem = "
   # source                  link  target,                    lag param_name        start
   # ------------------------------------------------------------------------------------
   # --- AR1 processes (one per environmental variable) ---
-  GOADI_spring            ->  GOADI_spring,             1,  GOADI_spring_AR1,             0
+  GOADIr_spring            ->  GOADIr_spring,             1,  GOADIr_spring_AR1,             0
   SST_WGOA_spring         ->  SST_WGOA_spring,          1,  SST_WGOA_spring_AR1,          0
   Wind_WGOA_spring        ->  Wind_WGOA_spring,         1,  Wind_WGOA_spring_AR1,         0
   Upwelling_WGOA_spring   ->  Upwelling_WGOA_spring,    1,  Upwelling_WGOA_spring_AR1,    0
-  NGAO_spring             ->  NGAO_spring,              1,  NGAO_spring_AR1,              0
+  NGAOr_spring             ->  NGAOr_spring,              1,  NGAOr_spring_AR1,              0
   Copepods_small_spring   ->  Copepods_small_spring,    1,  Copepods_small_spring_AR1,    0
 
   # --- GOADI (spring) ---
-  GOADI_spring            ->  SST_WGOA_spring,          0,  GOADI_to_SST,     0
-  GOADI_spring            ->  Wind_WGOA_spring,         0,  GOADI_to_Wind,    0
-  GOADI_spring            ->  Upwelling_WGOA_spring,    0,  GOADI_to_Up,      0
+  GOADIr_spring            ->  SST_WGOA_spring,          0,  GOADIr_to_SST,     0
+  GOADIr_spring            ->  Wind_WGOA_spring,         0,  GOADIr_to_Wind,    0
+  GOADIr_spring            ->  Upwelling_WGOA_spring,    0,  GOADIr_to_Up,      0
 
   # --- NGAO (spring) ---
-  NGAO_spring             ->  SST_WGOA_spring,          0,  NGAO_to_SST,      0
-  NGAO_spring             ->  Wind_WGOA_spring,         0,  NGAO_to_Wind,     0
-  NGAO_spring             ->  Upwelling_WGOA_spring,    0,  NGAO_to_Up,       0
-  NGAO_spring             ->  Copepods_small_spring,    0,  NGAO_to_Cop,      0
+  NGAOr_spring             ->  SST_WGOA_spring,          0,  NGAOr_to_SST,      0
+  NGAOr_spring             ->  Wind_WGOA_spring,         0,  NGAOr_to_Wind,     0
+  NGAOr_spring             ->  Upwelling_WGOA_spring,    0,  NGAOr_to_Up,       0
+  NGAOr_spring             ->  Copepods_small_spring,    0,  NGAOr_to_Cop,      0
 
   # --- Intermediaries ---
   SST_WGOA_spring         ->  Copepods_small_spring,    0,  SST_to_Cop,       0
@@ -225,8 +225,8 @@ pollocksem = "
   Wind_WGOA_spring        ->  recdevs1,                 1,  Wind_to_R,        0
   Copepods_small_spring   ->  recdevs1,                 1,  Cop_to_R,         0
   Upwelling_WGOA_spring   ->  recdevs1,                 1,  Up_to_R,          0
-  NGAO_spring             ->  recdevs1,                 1,  NGAO_to_R,        0
-  GOADI_spring            ->  recdevs1,                 1,  GOADI_to_R,       0
+  NGAOr_spring             ->  recdevs1,                 1,  NGAOr_to_R,        0
+  GOADIr_spring            ->  recdevs1,                 1,  GOADIr_to_R,       0
 
   # --- Recruitment variance ---
   recdevs1 <-> recdevs1,                                0,  sigmaR1,          1
@@ -238,11 +238,11 @@ pcodiidsem = "
   # source                  link  target,                    lag param_name        start
   # ------------------------------------------------------------------------------------
   # --- AR1 processes (one per environmental variable) ---
-  GOADI_spring            ->  GOADI_spring,             1,  GOADI_spring_AR1,             0
+  GOADIr_spring            ->  GOADIr_spring,             1,  GOADIr_spring_AR1,             0
   SST_WGOA_spring         ->  SST_WGOA_spring,          1,  SST_WGOA_spring_AR1,          0
   BottomTemp_WGOA_winter  ->  BottomTemp_WGOA_winter,   1,  BottomTemp_WGOA_winter_AR1,   0
   Upwelling_WGOA_spring   ->  Upwelling_WGOA_spring,    1,  Upwelling_WGOA_spring_AR1,    0
-  NGAO_spring             ->  NGAO_spring,              1,  NGAO_spring_AR1,              0
+  NGAOr_spring             ->  NGAOr_spring,              1,  NGAOr_spring_AR1,              0
   Copepods_small_spring   ->  Copepods_small_spring,    1,  Copepods_small_spring_AR1,    0
 
   # --- Recruitment variance ---
@@ -254,16 +254,16 @@ pcoddirectsem = "
   # source                  link  target,                    lag param_name        start
   # ------------------------------------------------------------------------------------
   # --- AR1 processes (one per environmental variable) ---
-  GOADI_spring            ->  GOADI_spring,             1,  GOADI_spring_AR1,             0
+  GOADIr_spring            ->  GOADIr_spring,             1,  GOADIr_spring_AR1,             0
   SST_WGOA_spring         ->  SST_WGOA_spring,          1,  SST_WGOA_spring_AR1,          0
   BottomTemp_WGOA_winter  ->  BottomTemp_WGOA_winter,   1,  BottomTemp_WGOA_winter_AR1,   0
   Upwelling_WGOA_spring   ->  Upwelling_WGOA_spring,    1,  Upwelling_WGOA_spring_AR1,    0
-  NGAO_spring             ->  NGAO_spring,              1,  NGAO_spring_AR1,              0
+  NGAOr_spring             ->  NGAOr_spring,              1,  NGAOr_spring_AR1,              0
   Copepods_small_spring   ->  Copepods_small_spring,    1,  Copepods_small_spring_AR1,    0
 
   # --- Recruitment ---
-  NGAO_spring             ->  recdevs1,                 1,  NGAO_to_R,        0
-  GOADI_spring            ->  recdevs1,                 1,  GOADI_to_R,       0
+  NGAOr_spring             ->  recdevs1,                 1,  NGAOr_to_R,        0
+  GOADIr_spring            ->  recdevs1,                 1,  GOADIr_to_R,       0
 
   # --- Recruitment variance ---
   recdevs1 <-> recdevs1,                                0,  sigmaR1,          1
@@ -274,23 +274,23 @@ pcodsem = "
   # source                  link  target,                    lag param_name        start
   # ------------------------------------------------------------------------------------
   # --- AR1 processes (one per environmental variable) ---
-  GOADI_spring            ->  GOADI_spring,             1,  GOADI_spring_AR1,             0
+  GOADIr_spring            ->  GOADIr_spring,             1,  GOADIr_spring_AR1,             0
   SST_WGOA_spring         ->  SST_WGOA_spring,          1,  SST_WGOA_spring_AR1,          0
   BottomTemp_WGOA_winter  ->  BottomTemp_WGOA_winter,   1,  BottomTemp_WGOA_winter_AR1,   0
   Upwelling_WGOA_spring   ->  Upwelling_WGOA_spring,    1,  Upwelling_WGOA_spring_AR1,    0
-  NGAO_spring             ->  NGAO_spring,              1,  NGAO_spring_AR1,              0
+  NGAOr_spring             ->  NGAOr_spring,              1,  NGAOr_spring_AR1,              0
   Copepods_small_spring   ->  Copepods_small_spring,    1,  Copepods_small_spring_AR1,    0
 
   # --- GOADI (spring) ---
-  GOADI_spring            ->  SST_WGOA_spring,          0,  GOADI_to_SST,     0
-  GOADI_spring            ->  BottomTemp_WGOA_winter,   0,  GOADI_to_BT,      0
-  GOADI_spring            ->  Upwelling_WGOA_spring,    0,  GOADI_to_Up,      0
+  GOADIr_spring            ->  SST_WGOA_spring,          0,  GOADIr_to_SST,     0
+  GOADIr_spring            ->  BottomTemp_WGOA_winter,   0,  GOADIr_to_BT,      0
+  GOADIr_spring            ->  Upwelling_WGOA_spring,    0,  GOADIr_to_Up,      0
 
   # --- NGAO (spring) ---
-  NGAO_spring             ->  SST_WGOA_spring,          0,  NGAO_to_SST,      0
-  NGAO_spring             ->  BottomTemp_WGOA_winter,   0,  NGAO_to_BT,       0
-  NGAO_spring             ->  Upwelling_WGOA_spring,    0,  NGAO_to_Up,       0
-  NGAO_spring             ->  Copepods_small_spring,    0,  NGAO_to_Cop,      0
+  NGAOr_spring             ->  SST_WGOA_spring,          0,  NGAOr_to_SST,      0
+  NGAOr_spring             ->  BottomTemp_WGOA_winter,   0,  NGAOr_to_BT,       0
+  NGAOr_spring             ->  Upwelling_WGOA_spring,    0,  NGAOr_to_Up,       0
+  NGAOr_spring             ->  Copepods_small_spring,    0,  NGAOr_to_Cop,      0
 
   # --- Intermediaries ---
   SST_WGOA_spring         ->  Copepods_small_spring,    0,  SST_to_Cop,       0
@@ -301,8 +301,8 @@ pcodsem = "
   BottomTemp_WGOA_winter  ->  recdevs1,                 1,  BT_to_R,          0
   Copepods_small_spring   ->  recdevs1,                 1,  Cop_to_R,         0
   Upwelling_WGOA_spring   ->  recdevs1,                 1,  Up_to_R,          0
-  NGAO_spring             ->  recdevs1,                 1,  NGAO_to_R,        0
-  GOADI_spring            ->  recdevs1,                 1,  GOADI_to_R,       0
+  NGAOr_spring             ->  recdevs1,                 1,  NGAOr_to_R,        0
+  GOADIr_spring            ->  recdevs1,                 1,  GOADIr_to_R,       0
 
   # --- Recruitment variance ---
   recdevs1 <-> recdevs1,                                0,  sigmaR1,          1
