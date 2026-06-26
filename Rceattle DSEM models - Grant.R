@@ -96,6 +96,54 @@ atf_full_mod <- Rceattle::fit_mod(data_list = atfdata,
                                    verbose = 1,
                                    phase = TRUE))
 
+atf_sem_tran <- Rceattle::fit_mod(data_list = atfdata,
+                                  inits = NULL, # Initial parameters = 0
+                                  file = NULL, # Don't save
+                                  estimateMode = 0, # Estimate
+                                  random_rec = TRUE,
+                                  dsem = build_DSEM(
+                                    sem = atfsem_tran,
+                                    family = "fixed",
+                                    sigmaR_prior_sd = 0.5
+                                  ),
+                                  msmMode = 0, # Single species mode
+                                  initMode = 1,
+                                  fit_control = fit_control(
+                                    verbose = 1,
+                                    phase = TRUE))
+
+atf_sem_prey <- Rceattle::fit_mod(data_list = atfdata,
+                                   inits = NULL, # Initial parameters = 0
+                                   file = NULL, # Don't save
+                                   estimateMode = 0, # Estimate
+                                   random_rec = TRUE,
+                                   dsem = build_DSEM(
+                                     sem = atfsem_prey,
+                                     family = "fixed",
+                                     sigmaR_prior_sd = 0.5
+                                   ),
+                                   msmMode = 0, # Single species mode
+                                   initMode = 1,
+                                   fit_control = fit_control(
+                                     verbose = 1,
+                                     phase = TRUE))
+
+atf_sem_hab <- Rceattle::fit_mod(data_list = atfdata,
+                                   inits = NULL, # Initial parameters = 0
+                                   file = NULL, # Don't save
+                                   estimateMode = 0, # Estimate
+                                   random_rec = TRUE,
+                                   dsem = build_DSEM(
+                                     sem = atfsem_hab,
+                                     family = "fixed",
+                                     sigmaR_prior_sd = 0.5
+                                   ),
+                                   msmMode = 0, # Single species mode
+                                   initMode = 1,
+                                   fit_control = fit_control(
+                                     verbose = 1,
+                                     phase = TRUE))
+
 
 # * Northern rockfish ----
 # - Estimate M with lognormal prior (urm: mean_M = 0.06, cv_M = 0.05).
@@ -161,6 +209,62 @@ nork_full_mod <- Rceattle::fit_mod(data_list = nrdata,
                                     verbose = 1,
                                     phase = TRUE))
 
+nork_sem_tran <- Rceattle::fit_mod(data_list = nrdata,
+                                   estimateMode = 0,
+                                   random_rec = TRUE,
+                                   msmMode = 0,
+                                   initMode = 2,
+                                   dsem = build_DSEM(
+                                     sem = norksem_tran,
+                                     family = "fixed",
+                                     sigmaR_prior_sd = 0.5
+                                   ),
+                                   M1Fun = build_M1(updateM1 = TRUE,
+                                                    M1_model     = 1,
+                                                    M1_use_prior = TRUE,
+                                                    M_prior      = 0.06,
+                                                    M_prior_sd   = 0.05),
+                                   fit_control = fit_control(
+                                     verbose = 1,
+                                     phase = TRUE))
+
+nork_sem_prey <- Rceattle::fit_mod(data_list = nrdata,
+                                   estimateMode = 0,
+                                   random_rec = TRUE,
+                                   msmMode = 0,
+                                   initMode = 2,
+                                   dsem = build_DSEM(
+                                     sem = norksem_prey,
+                                     family = "fixed",
+                                     sigmaR_prior_sd = 0.5
+                                   ),
+                                   M1Fun = build_M1(updateM1 = TRUE,
+                                                    M1_model     = 1,
+                                                    M1_use_prior = TRUE,
+                                                    M_prior      = 0.06,
+                                                    M_prior_sd   = 0.05),
+                                   fit_control = fit_control(
+                                     verbose = 1,
+                                     phase = TRUE))
+
+nork_sem_hab <- Rceattle::fit_mod(data_list = nrdata,
+                                   estimateMode = 0,
+                                   random_rec = TRUE,
+                                   msmMode = 0,
+                                   initMode = 2,
+                                   dsem = build_DSEM(
+                                     sem = norksem_hab,
+                                     family = "fixed",
+                                     sigmaR_prior_sd = 0.5
+                                   ),
+                                   M1Fun = build_M1(updateM1 = TRUE,
+                                                    M1_model     = 1,
+                                                    M1_use_prior = TRUE,
+                                                    M_prior      = 0.06,
+                                                    M_prior_sd   = 0.05),
+                                   fit_control = fit_control(
+                                     verbose = 1,
+                                     phase = TRUE))
 
 # * Pollock ----
 pk_iid_mod <- fit_mod(data_list = pkdata,
@@ -205,6 +309,47 @@ pk_full_mod <- fit_mod(data_list = pkdata,
                          verbose = 1,
                          phase = TRUE))
 
+pk_sem_tran <- fit_mod(data_list = pkdata,
+                       estimateMode = 0,   # Estimate
+                       random_rec = TRUE,
+                       msmMode = 0,        # Single species mode
+                       initMode = 1,
+                       dsem = build_DSEM(
+                         sem = pollocksem_tran,
+                         family = "fixed",
+                         sigmaR_prior_sd = 0.5
+                       ),
+                       fit_control = fit_control(
+                         verbose = 1,
+                         phase = TRUE))
+
+pk_sem_prey <- fit_mod(data_list = pkdata,
+                       estimateMode = 0,   # Estimate
+                       random_rec = TRUE,
+                       msmMode = 0,        # Single species mode
+                       initMode = 1,
+                       dsem = build_DSEM(
+                         sem = pollocksem_prey,
+                         family = "fixed",
+                         sigmaR_prior_sd = 0.5
+                       ),
+                       fit_control = fit_control(
+                         verbose = 1,
+                         phase = TRUE))
+
+pk_sem_hab <- fit_mod(data_list = pkdata,
+                       estimateMode = 0,   # Estimate
+                       random_rec = TRUE,
+                       msmMode = 0,        # Single species mode
+                       initMode = 1,
+                       dsem = build_DSEM(
+                         sem = pollocksem_hab,
+                         family = "fixed",
+                         sigmaR_prior_sd = 0.5
+                       ),
+                       fit_control = fit_control(
+                         verbose = 1,
+                         phase = TRUE))
 # * Pcod ----
 cod_iid_mod <- Rceattle::fit_mod(data_list = pcoddata,
                              inits = NULL, # Initial parameters = 0
@@ -252,6 +397,51 @@ cod_full_mod <- Rceattle::fit_mod(data_list = pcoddata,
                                     verbose = 1,
                                     phase = TRUE))
 
+cod_sem_tran <- Rceattle::fit_mod(data_list = pcoddata,
+                                  inits = NULL, # Initial parameters = 0
+                                  estimateMode = 0, # Estimate
+
+                                  M1Fun        = M1_block,
+                                  dsem = build_DSEM(
+                                    sem = pcodsem_tran,
+                                    family = "fixed",
+                                    sigmaR_prior_sd = 0.5
+                                  ),
+                                  random_rec = TRUE,
+                                  fit_control = fit_control(
+                                    verbose = 1,
+                                    phase = TRUE))
+
+cod_sem_prey <- Rceattle::fit_mod(data_list = pcoddata,
+                                  inits = NULL, # Initial parameters = 0
+                                  estimateMode = 0, # Estimate
+
+                                  M1Fun        = M1_block,
+                                  dsem = build_DSEM(
+                                    sem = pcodsem_prey,
+                                    family = "fixed",
+                                    sigmaR_prior_sd = 0.5
+                                  ),
+                                  random_rec = TRUE,
+                                  fit_control = fit_control(
+                                    verbose = 1,
+                                    phase = TRUE))
+
+cod_sem_hab <- Rceattle::fit_mod(data_list = pcoddata,
+                                  inits = NULL, # Initial parameters = 0
+                                  estimateMode = 0, # Estimate
+
+                                  M1Fun        = M1_block,
+                                  dsem = build_DSEM(
+                                    sem = pcodsem_hab,
+                                    family = "fixed",
+                                    sigmaR_prior_sd = 0.5
+                                  ),
+                                  random_rec = TRUE,
+                                  fit_control = fit_control(
+                                    verbose = 1,
+                                    phase = TRUE))
+
 # Summaries ----
 # - ATF
 summ_atf <- summary(atf_iid_mod)$coefficients %>% dplyr::mutate(Model = "Base",
@@ -260,7 +450,15 @@ summ_atf_iid <- summary(atf_direct_mod)$coefficients %>% dplyr::mutate(Model = "
                                                                   Species = "ATF")
 summ_atf_sem <- summary(atf_full_mod)$coefficients %>% dplyr::mutate(Model = "Full DSEM",
                                                                       Species = "ATF")
-results <- do.call("rbind", list(summ_atf, summ_atf_iid, summ_atf_sem))
+summ_atf_sem_tran <- summary(atf_sem_tran)$coefficients %>% dplyr::mutate(Model = "Transport",
+                                                                              Species = "ATF")
+
+summ_atf_sem_prey <- summary(atf_sem_prey)$coefficients %>% dplyr::mutate(Model = "Prey",
+                                                                              Species = "Prey")
+
+summ_atf_sem_hab <- summary(atf_sem_hab)$coefficients %>% dplyr::mutate(Model = "Habitat",
+                                                                            Species = "ATF")
+results <- do.call("rbind", list(summ_atf, summ_atf_iid, summ_atf_sem, summ_atf_sem_tran, summ_atf_sem_prey, summ_atf_sem_hab))
 write.csv(results, file = "Results/Initial_DSEM_atf.csv")
 
 # - NORK
@@ -270,7 +468,16 @@ summ_nork_iid <- summary(nork_direct_mod)$coefficients %>% dplyr::mutate(Model =
                                                                   Species = "NORK")
 summ_nork_sem <- summary(nork_full_mod)$coefficients %>% dplyr::mutate(Model = "Full DSEM",
                                                                    Species = "NORK")
-results <- do.call("rbind", list(summ_nork, summ_nork_iid, summ_nork_sem))
+summ_nork_sem_tran <- summary(nork_sem_tran)$coefficients %>% dplyr::mutate(Model = "Transport",
+                                                                                Species = "NORK")
+
+summ_nork_sem_prey <- summary(nork_sem_prey)$coefficients %>% dplyr::mutate(Model = "Prey",
+                                                                                Species = "NORK")
+
+summ_nork_sem_hab <- summary(nork_sem_hab)$coefficients %>% dplyr::mutate(Model = "Habitat",
+                                                                              Species = "NORK")
+results <- do.call("rbind", list(summ_nork, summ_nork_iid, summ_nork_sem, summ_nork_sem_tran, summ_nork_sem_prey, summ_nork_sem_hab))
+
 write.csv(results, file = "Results/Initial_DSEM_nork.csv")
 
 # - Pollock
@@ -280,7 +487,15 @@ summ_pk_iid <- summary(pk_direct_mod)$coefficients %>% dplyr::mutate(Model = "Di
                                                           Species = "Pollock")
 summ_pk_sem <- summary(pk_full_mod)$coefficients %>% dplyr::mutate(Model = "Full DSEM",
                                                                    Species = "Pollock")
-results <- do.call("rbind", list(summ_pk, summ_pk_iid, summ_pk_sem))
+
+summ_pk_sem_tran <- summary(pk_dsem_tran)$coefficients %>% dplyr::mutate(Model = "Transport",
+                                                                             Species = "Pollock")
+summ_pk_sem_prey <- summary(pk_dsem_prey)$coefficients %>% dplyr::mutate(Model = "Prey",
+                                                                             Species = "Pollock")
+summ_pk_sem_hab <- summary(pk_dsem_hab)$coefficients %>% dplyr::mutate(Model = "Habitat",
+                                                                           Species = "Pollock")
+results <- do.call("rbind", list(summ_pk, summ_pk_iid, summ_pk_sem, summ_pk_sem_tran, summ_pk_sem_prey, summ_pk_sem_hab))
+
 write.csv(results, file = "Results/Initial_DSEM_pk.csv")
 
 # - Cod
@@ -290,7 +505,14 @@ summ_cod_iid <- summary(cod_direct_mod)$coefficients %>% dplyr::mutate(Model = "
                                                                   Species = "Cod")
 summ_cod_sem <- summary(cod_full_mod)$coefficients %>% dplyr::mutate(Model = "Full DSEM",
                                                                    Species = "Cod")
-results <- do.call("rbind", list(summ_cod, summ_cod_iid, summ_cod_sem))
+summ_cod_sem_tran <- summary(cod_dsem_tran)$coefficients %>% dplyr::mutate(Model = "Transport",
+                                                                               Species = "Cod")
+summ_cod_sem_prey <- summary(cod_dsem_prey)$coefficients %>% dplyr::mutate(Model = "Prey",
+                                                                               Species = "Cod")
+summ_cod_sem_hab <- summary(cod_dsem_hab)$coefficients %>% dplyr::mutate(Model = "Habitat",
+                                                                             Species = "Cod")
+results <- do.call("rbind", list(summ_cod, summ_cod_iid, summ_cod_sem, summ_cod_sem_tran, summ_cod_sem_prey, summ_cod_sem_hab))
+
 write.csv(results, file = "Results/Initial_DSEM_cod.csv")
 
 
