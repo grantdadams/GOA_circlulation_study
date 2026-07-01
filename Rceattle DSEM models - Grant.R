@@ -48,6 +48,12 @@ pkdata$projyr <- pkdata$endyr
 
 # Fit models ----
 # * Arrowtooth ----
+load("atf_iid_mod.Rdata")
+load("atf_direct_mod.Rdata")
+load("atf_full_mod.Rdata")
+load("atf_sem_tran.Rdata")
+load("atf_sem_prey.Rdata")
+load("atf_sem_hab.Rdata")
 atf_iid_mod <- Rceattle::fit_mod(data_list = atfdata,
                              inits = NULL, # Initial parameters = 0
                              file = NULL, # Don't save
@@ -63,6 +69,8 @@ atf_iid_mod <- Rceattle::fit_mod(data_list = atfdata,
                              fit_control = fit_control(
                                verbose = 1,
                                phase = TRUE))
+save(atf_iid_mod, file = "atf_iid_mod.Rdata")
+gc() #clear memory
 
 atf_direct_mod <- Rceattle::fit_mod(data_list = atfdata,
                                  inits = NULL, # Initial parameters = 0
@@ -79,6 +87,8 @@ atf_direct_mod <- Rceattle::fit_mod(data_list = atfdata,
                                  fit_control = fit_control(
                                    verbose = 1,
                                    phase = TRUE))
+save(atf_direct_mod, file = "atf_direct_mod.Rdata")
+gc() #clear memory
 
 atf_full_mod <- Rceattle::fit_mod(data_list = atfdata,
                                  inits = NULL, # Initial parameters = 0
@@ -95,6 +105,8 @@ atf_full_mod <- Rceattle::fit_mod(data_list = atfdata,
                                  fit_control = fit_control(
                                    verbose = 1,
                                    phase = TRUE))
+save(atf_full_mod, file = "atf_full_mod.Rdata")
+gc() #clear memory
 
 atf_sem_tran <- Rceattle::fit_mod(data_list = atfdata,
                                   inits = NULL, # Initial parameters = 0
@@ -111,6 +123,8 @@ atf_sem_tran <- Rceattle::fit_mod(data_list = atfdata,
                                   fit_control = fit_control(
                                     verbose = 1,
                                     phase = TRUE))
+save(atf_sem_tran, file = "atf_sem_tran.Rdata")
+gc() #clear memory
 
 atf_sem_prey <- Rceattle::fit_mod(data_list = atfdata,
                                    inits = NULL, # Initial parameters = 0
@@ -127,6 +141,8 @@ atf_sem_prey <- Rceattle::fit_mod(data_list = atfdata,
                                    fit_control = fit_control(
                                      verbose = 1,
                                      phase = TRUE))
+save(atf_sem_prey, file = "atf_sem_prey.Rdata")
+gc() #clear memory
 
 atf_sem_hab <- Rceattle::fit_mod(data_list = atfdata,
                                    inits = NULL, # Initial parameters = 0
@@ -143,7 +159,8 @@ atf_sem_hab <- Rceattle::fit_mod(data_list = atfdata,
                                    fit_control = fit_control(
                                      verbose = 1,
                                      phase = TRUE))
-
+save(atf_sem_hab, file = "atf_sem_hab.Rdata")
+gc() #clear memory
 
 # * Northern rockfish ----
 # - Estimate M with lognormal prior (urm: mean_M = 0.06, cv_M = 0.05).
@@ -168,7 +185,8 @@ nork_iid_mod <- Rceattle::fit_mod(data_list = nrdata,
                               fit_control = fit_control(
                                 verbose = 1,
                                 phase = TRUE))
-
+save(nork_iid_mod, file = "nork_iid_mod.Rdata")
+gc() #clear memory
 
 nork_direct_mod <- Rceattle::fit_mod(data_list = nrdata,
                                   estimateMode = 0,
@@ -188,7 +206,8 @@ nork_direct_mod <- Rceattle::fit_mod(data_list = nrdata,
                                   fit_control = fit_control(
                                     verbose = 1,
                                     phase = TRUE))
-
+save(nork_direct_mod, file = "nork_direct_mod.Rdata")
+gc() #clear memory
 
 nork_full_mod <- Rceattle::fit_mod(data_list = nrdata,
                                   estimateMode = 0,
@@ -208,6 +227,8 @@ nork_full_mod <- Rceattle::fit_mod(data_list = nrdata,
                                   fit_control = fit_control(
                                     verbose = 1,
                                     phase = TRUE))
+save(nork_full_mod, file = "nork_full_mod.Rdata")
+gc() #clear memory
 
 nork_sem_tran <- Rceattle::fit_mod(data_list = nrdata,
                                    estimateMode = 0,
@@ -227,6 +248,8 @@ nork_sem_tran <- Rceattle::fit_mod(data_list = nrdata,
                                    fit_control = fit_control(
                                      verbose = 1,
                                      phase = TRUE))
+save(nork_sem_tran, file = "nork_sem_tran.Rdata")
+gc() #clear memory
 
 nork_sem_prey <- Rceattle::fit_mod(data_list = nrdata,
                                    estimateMode = 0,
@@ -246,6 +269,8 @@ nork_sem_prey <- Rceattle::fit_mod(data_list = nrdata,
                                    fit_control = fit_control(
                                      verbose = 1,
                                      phase = TRUE))
+save(nork_sem_prey, file = "nork_sem_prey.Rdata")
+gc() #clear memory
 
 nork_sem_hab <- Rceattle::fit_mod(data_list = nrdata,
                                    estimateMode = 0,
@@ -265,8 +290,16 @@ nork_sem_hab <- Rceattle::fit_mod(data_list = nrdata,
                                    fit_control = fit_control(
                                      verbose = 1,
                                      phase = TRUE))
+save(nork_sem_hab, file = "nork_sem_hab.Rdata")
+gc() #clear memory
 
 # * Pollock ----
+load("pk_iid_mod.Rdata")
+load("pk_direct_mod.Rdata")
+load("pk_full_mod.Rdata")
+load("pk_sem_tran.Rdata")
+load("pk_sem_prey.Rdata")
+load("pk_sem_hab.Rdata")
 pk_iid_mod <- fit_mod(data_list = pkdata,
                   estimateMode = 0,   # Estimate
                   random_rec = TRUE,
@@ -279,6 +312,8 @@ pk_iid_mod <- fit_mod(data_list = pkdata,
                   fit_control = fit_control(
                     verbose = 1,
                     phase = TRUE))
+save(pk_iid_mod, file = "pk_iid_mod.Rdata")
+gc() #clear memory
 
 
 pk_direct_mod <- fit_mod(data_list = pkdata,
@@ -294,6 +329,8 @@ pk_direct_mod <- fit_mod(data_list = pkdata,
                        fit_control = fit_control(
                          verbose = 1,
                          phase = TRUE))
+save(pk_direct_mod, file = "pk_direct_mod.Rdata")
+gc() #clear memory
 
 pk_full_mod <- fit_mod(data_list = pkdata,
                        estimateMode = 0,   # Estimate
@@ -308,6 +345,8 @@ pk_full_mod <- fit_mod(data_list = pkdata,
                        fit_control = fit_control(
                          verbose = 1,
                          phase = TRUE))
+save(pk_full_mod, file = "pk_full_mod.Rdata")
+gc() #clear memory
 
 pk_sem_tran <- fit_mod(data_list = pkdata,
                        estimateMode = 0,   # Estimate
@@ -322,6 +361,8 @@ pk_sem_tran <- fit_mod(data_list = pkdata,
                        fit_control = fit_control(
                          verbose = 1,
                          phase = TRUE))
+save(pk_sem_tran, file = "pk_sem_tran.Rdata")
+gc() #clear memory
 
 pk_sem_prey <- fit_mod(data_list = pkdata,
                        estimateMode = 0,   # Estimate
@@ -336,6 +377,8 @@ pk_sem_prey <- fit_mod(data_list = pkdata,
                        fit_control = fit_control(
                          verbose = 1,
                          phase = TRUE))
+save(pk_sem_prey, file = "pk_sem_prey.Rdata")
+gc() #clear memory
 
 pk_sem_hab <- fit_mod(data_list = pkdata,
                        estimateMode = 0,   # Estimate
@@ -350,7 +393,16 @@ pk_sem_hab <- fit_mod(data_list = pkdata,
                        fit_control = fit_control(
                          verbose = 1,
                          phase = TRUE))
+save(pk_sem_hab, file = "pk_sem_hab.Rdata")
+gc() #clear memory
 # * Pcod ----
+load("cod_iid_mod.Rdata")
+load("cod_direct_mod.Rdata")
+load("cod_full_mod.Rdata")
+load("cod_sem_tran.Rdata")
+load("cod_sem_prey.Rdata")
+load("cod_sem_hab.Rdata")
+
 cod_iid_mod <- Rceattle::fit_mod(data_list = pcoddata,
                              inits = NULL, # Initial parameters = 0
                              estimateMode = 0, # Estimate
@@ -365,6 +417,8 @@ cod_iid_mod <- Rceattle::fit_mod(data_list = pcoddata,
                              fit_control = fit_control(
                                verbose = 1,
                                phase = TRUE))
+save(cod_iid_mod, file = "cod_iid_mod.Rdata")
+gc() #clear memory
 
 
 cod_direct_mod <- Rceattle::fit_mod(data_list = pcoddata,
@@ -381,6 +435,8 @@ cod_direct_mod <- Rceattle::fit_mod(data_list = pcoddata,
                                   fit_control = fit_control(
                                     verbose = 1,
                                     phase = TRUE))
+save(cod_direct_mod, file = "cod_direct_mod.Rdata")
+gc() #clear memory
 
 cod_full_mod <- Rceattle::fit_mod(data_list = pcoddata,
                                   inits = NULL, # Initial parameters = 0
@@ -396,6 +452,9 @@ cod_full_mod <- Rceattle::fit_mod(data_list = pcoddata,
                                   fit_control = fit_control(
                                     verbose = 1,
                                     phase = TRUE))
+save(cod_full_mod, file = "cod_full_mod.Rdata")
+gc() #clear memory
+
 
 cod_sem_tran <- Rceattle::fit_mod(data_list = pcoddata,
                                   inits = NULL, # Initial parameters = 0
@@ -411,6 +470,8 @@ cod_sem_tran <- Rceattle::fit_mod(data_list = pcoddata,
                                   fit_control = fit_control(
                                     verbose = 1,
                                     phase = TRUE))
+save(cod_sem_tran, file = "cod_sem_tran.Rdata")
+gc() #clear memory
 
 cod_sem_prey <- Rceattle::fit_mod(data_list = pcoddata,
                                   inits = NULL, # Initial parameters = 0
@@ -426,6 +487,8 @@ cod_sem_prey <- Rceattle::fit_mod(data_list = pcoddata,
                                   fit_control = fit_control(
                                     verbose = 1,
                                     phase = TRUE))
+save(cod_sem_prey, file = "cod_sem_prey.Rdata")
+gc() #clear memory
 
 cod_sem_hab <- Rceattle::fit_mod(data_list = pcoddata,
                                   inits = NULL, # Initial parameters = 0
@@ -441,79 +504,107 @@ cod_sem_hab <- Rceattle::fit_mod(data_list = pcoddata,
                                   fit_control = fit_control(
                                     verbose = 1,
                                     phase = TRUE))
+save(cod_sem_hab, file = "cod_sem_hab.Rdata")
+gc() #clear memory
 
 # Summaries ----
 # - ATF
-summ_atf <- summary(atf_iid_mod)$coefficients %>% dplyr::mutate(Model = "Base",
+summ_atf_iid <- summary(atf_iid_mod)$coefficients %>% dplyr::mutate(Model = "Base",
                                                               Species = "ATF")
-summ_atf_iid <- summary(atf_direct_mod)$coefficients %>% dplyr::mutate(Model = "Direct DSEM",
+atf_iid_AIC <- rep(AIC(atf_iid_mod),length(summ_atf_iid[,1]))
+summ_atf_dir <- summary(atf_direct_mod)$coefficients %>% dplyr::mutate(Model = "Direct DSEM",
                                                                   Species = "ATF")
+atf_dir_AIC <- rep(AIC(atf_direct_mod),length(summ_atf_dir[,1]))
 summ_atf_sem <- summary(atf_full_mod)$coefficients %>% dplyr::mutate(Model = "Full DSEM",
                                                                       Species = "ATF")
+atf_sem_AIC <- rep(AIC(atf_full_mod),length(summ_atf_sem[,1]))
 summ_atf_sem_tran <- summary(atf_sem_tran)$coefficients %>% dplyr::mutate(Model = "Transport",
                                                                               Species = "ATF")
-
+atf_tran_AIC <- rep(AIC(atf_sem_tran),length(summ_atf_sem_tran[,1]))
 summ_atf_sem_prey <- summary(atf_sem_prey)$coefficients %>% dplyr::mutate(Model = "Prey",
-                                                                              Species = "Prey")
-
+                                                                              Species = "ATF")
+atf_prey_AIC <- rep(AIC(atf_sem_prey),length(summ_atf_sem_prey[,1]))
 summ_atf_sem_hab <- summary(atf_sem_hab)$coefficients %>% dplyr::mutate(Model = "Habitat",
                                                                             Species = "ATF")
-results <- do.call("rbind", list(summ_atf, summ_atf_iid, summ_atf_sem, summ_atf_sem_tran, summ_atf_sem_prey, summ_atf_sem_hab))
-write.csv(results, file = "Results/Initial_DSEM_atf.csv")
+atf_hab_AIC <- rep(AIC(atf_sem_hab),length(summ_atf_sem_hab[,1]))
+
+AICmod_ATF <- c(atf_iid_AIC, atf_dir_AIC, atf_sem_AIC, atf_tran_AIC, atf_prey_AIC, atf_hab_AIC)
+results_ATF <- do.call("rbind", list(summ_atf_iid, summ_atf_dir, summ_atf_sem, summ_atf_sem_tran, summ_atf_sem_prey, summ_atf_sem_hab))
+results_ATF$AIC <- AICmod_ATF
+write.csv(results_ATF, file = "Results/Initial_DSEM_atf.csv")
 
 # - NORK
-summ_nork <- summary(nork_iid_mod)$coefficients %>% dplyr::mutate(Model = "IID",
-                                                          Species = "NORK")
-summ_nork_iid <- summary(nork_direct_mod)$coefficients %>% dplyr::mutate(Model = "Direct DSEM",
+summ_nork_iid <- summary(nork_iid_mod)$coefficients %>% dplyr::mutate(Model = "IID",
+                                                                      Species = "NORK")
+nork_iid_AIC <- rep(AIC(nork_sem_iid),length(summ_nork_iid[,1]))
+summ_nork_dir <- summary(nork_direct_mod)$coefficients %>% dplyr::mutate(Model = "Direct DSEM",
                                                                   Species = "NORK")
+nork_dir_AIC <- rep(AIC(nork_sem_dir),length(summ_nork_dir[,1]))
 summ_nork_sem <- summary(nork_full_mod)$coefficients %>% dplyr::mutate(Model = "Full DSEM",
                                                                    Species = "NORK")
+nork_full_AIC <- rep(AIC(nork_sem_full),length(summ_nork_sem[,1]))
 summ_nork_sem_tran <- summary(nork_sem_tran)$coefficients %>% dplyr::mutate(Model = "Transport",
                                                                                 Species = "NORK")
-
+nork_tran_AIC <- rep(AIC(nork_sem_tran),length(summ_nork_sem_tran[,1]))
 summ_nork_sem_prey <- summary(nork_sem_prey)$coefficients %>% dplyr::mutate(Model = "Prey",
                                                                                 Species = "NORK")
-
+nork_prey_AIC <- rep(AIC(nork_sem_prey),length(summ_nork_sem_prey[,1]))
 summ_nork_sem_hab <- summary(nork_sem_hab)$coefficients %>% dplyr::mutate(Model = "Habitat",
                                                                               Species = "NORK")
-results <- do.call("rbind", list(summ_nork, summ_nork_iid, summ_nork_sem, summ_nork_sem_tran, summ_nork_sem_prey, summ_nork_sem_hab))
-
-write.csv(results, file = "Results/Initial_DSEM_nork.csv")
+nork_hab_AIC <- rep(AIC(nork_sem_hab),length(summ_nork_sem_hab[,1]))
+AICmod_NORK <- c(nork_iid_AIC,nork_dir_AIC, nork_sem_AIC, nork_tran_AIC, nork_prey_AIC, nork_hab_AIC)
+results_NORK <- do.call("rbind", list(summ_nork, summ_nork_iid, summ_nork_sem, summ_nork_sem_tran, summ_nork_sem_prey, summ_nork_sem_hab))
+results_NORK$AIC <- AICmod_NORK
+write.csv(results_NORK, file = "Results/Initial_DSEM_nork.csv")
 
 # - Pollock
-summ_pk <- summary(pk_iid_mod)$coefficients %>% dplyr::mutate(Model = "IID",
+summ_pk_iid <- summary(pk_iid_mod)$coefficients %>% dplyr::mutate(Model = "IID",
                                                           Species = "Pollock")
-summ_pk_iid <- summary(pk_direct_mod)$coefficients %>% dplyr::mutate(Model = "Direct DSEM",
+pk_iid_AIC <- rep(AIC(pk_iid_mod),length(summ_pk_iid[,1]))
+summ_pk_dir <- summary(pk_direct_mod)$coefficients %>% dplyr::mutate(Model = "Direct DSEM",
                                                           Species = "Pollock")
+pk_dir_AIC <- rep(AIC(pk_direct_mod),length(summ_pk_dir[,1]))
 summ_pk_sem <- summary(pk_full_mod)$coefficients %>% dplyr::mutate(Model = "Full DSEM",
                                                                    Species = "Pollock")
-
-summ_pk_sem_tran <- summary(pk_dsem_tran)$coefficients %>% dplyr::mutate(Model = "Transport",
+pk_full_AIC <- rep(AIC(pk_full_mod),length(summ_pk_sem[,1]))
+summ_pk_sem_tran <- summary(pk_sem_tran)$coefficients %>% dplyr::mutate(Model = "Transport",
                                                                              Species = "Pollock")
-summ_pk_sem_prey <- summary(pk_dsem_prey)$coefficients %>% dplyr::mutate(Model = "Prey",
+pk_tran_AIC <- rep(AIC(pk_sem_tran),length(summ_pk_sem_tran[,1]))
+summ_pk_sem_prey <- summary(pk_sem_prey)$coefficients %>% dplyr::mutate(Model = "Prey",
                                                                              Species = "Pollock")
-summ_pk_sem_hab <- summary(pk_dsem_hab)$coefficients %>% dplyr::mutate(Model = "Habitat",
+pk_prey_AIC <- rep(AIC(pk_sem_prey),length(summ_pk_sem_prey[,1]))
+summ_pk_sem_hab <- summary(pk_sem_hab)$coefficients %>% dplyr::mutate(Model = "Habitat",
                                                                            Species = "Pollock")
-results <- do.call("rbind", list(summ_pk, summ_pk_iid, summ_pk_sem, summ_pk_sem_tran, summ_pk_sem_prey, summ_pk_sem_hab))
+pk_hab_AIC <- rep(AIC(pk_sem_hab),length(summ_pk_sem_hab[,1]))
 
-write.csv(results, file = "Results/Initial_DSEM_pk.csv")
+AICmod_pk <- c(pk_iid_AIC,pk_dir_AIC, pk_full_AIC, pk_tran_AIC, pk_prey_AIC, pk_hab_AIC)
+results_pk <- do.call("rbind", list(summ_pk_iid, summ_pk_dir, summ_pk_sem, summ_pk_sem_tran, summ_pk_sem_prey, summ_pk_sem_hab))
+results_pk$AIC <- AICmod_pk
+write.csv(results_pk, file = "Results/Initial_DSEM_pk.csv")
 
 # - Cod
-summ_cod <- summary(cod_iid_mod)$coefficients %>% dplyr::mutate(Model = "IID",
+summ_cod_iid <- summary(cod_iid_mod)$coefficients %>% dplyr::mutate(Model = "IID",
                                                           Species = "Cod")
-summ_cod_iid <- summary(cod_direct_mod)$coefficients %>% dplyr::mutate(Model = "Direct DSEM",
+cod_iid_AIC <- rep(AIC(cod_iid_mod),length(summ_cod_iid[,1]))
+summ_cod_dir <- summary(cod_direct_mod)$coefficients %>% dplyr::mutate(Model = "Direct DSEM",
                                                                   Species = "Cod")
+cod_dir_AIC <- rep(AIC(cod_direct_mod),length(summ_cod_dir[,1]))
 summ_cod_sem <- summary(cod_full_mod)$coefficients %>% dplyr::mutate(Model = "Full DSEM",
                                                                    Species = "Cod")
-summ_cod_sem_tran <- summary(cod_dsem_tran)$coefficients %>% dplyr::mutate(Model = "Transport",
+cod_full_AIC <- rep(AIC(cod_full_mod),length(summ_cod_sem[,1]))
+summ_cod_sem_tran <- summary(cod_sem_tran)$coefficients %>% dplyr::mutate(Model = "Transport",
                                                                                Species = "Cod")
-summ_cod_sem_prey <- summary(cod_dsem_prey)$coefficients %>% dplyr::mutate(Model = "Prey",
+cod_tran_AIC <- rep(AIC(cod_sem_tran),length(summ_cod_sem_tran[,1]))
+summ_cod_sem_prey <- summary(cod_sem_prey)$coefficients %>% dplyr::mutate(Model = "Prey",
                                                                                Species = "Cod")
-summ_cod_sem_hab <- summary(cod_dsem_hab)$coefficients %>% dplyr::mutate(Model = "Habitat",
+cod_prey_AIC <- rep(AIC(cod_sem_prey),length(summ_cod_sem_prey[,1]))
+summ_cod_sem_hab <- summary(cod_sem_hab)$coefficients %>% dplyr::mutate(Model = "Habitat",
                                                                              Species = "Cod")
-results <- do.call("rbind", list(summ_cod, summ_cod_iid, summ_cod_sem, summ_cod_sem_tran, summ_cod_sem_prey, summ_cod_sem_hab))
-
-write.csv(results, file = "Results/Initial_DSEM_cod.csv")
+cod_hab_AIC <- rep(AIC(cod_sem_hab),length(summ_cod_sem_hab[,1]))
+AICmod_cod <- c(cod_iid_AIC,cod_dir_AIC, cod_full_AIC, cod_tran_AIC, cod_prey_AIC, cod_hab_AIC)
+results_cod <- do.call("rbind", list(summ_cod_iid, summ_cod_dir, summ_cod_sem, summ_cod_sem_tran, summ_cod_sem_prey, summ_cod_sem_hab))
+results_cod$AIC <- AICmod_cod
+write.csv(results_cod, file = "Results/Initial_DSEM_cod.csv")
 
 
 
