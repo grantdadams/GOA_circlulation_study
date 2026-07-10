@@ -520,31 +520,31 @@ summ_atf_dir <- summary(atf_direct_mod)$coefficients %>% dplyr::mutate(Model = "
                                                                   Species = "ATF")
 atf_dir_AIC <- rep(AIC(atf_direct_mod),length(summ_atf_dir[,1]))
 atf_dir_Rsd <- rep((summary(atf_direct_mod)$recruitment_sd$R_sd),length(summ_atf_dir[,1])) #recruitment SD (sigmaR)
-atf_dir_deltaRsd <- rep((atf_dir_Rsd[1]-atf_iid_Rsd[1]),length(summ_atf_dir[,1])) #delta recruitment SD (subtract from IID model to see if dleta increases)
+atf_dir_deltaRsd <- rep((atf_iid_Rsd[1]-atf_dir_Rsd[1]),length(summ_atf_dir[,1])) #delta recruitment SD (subtract from IID model to see if dleta increases)
 
 summ_atf_sem <- summary(atf_full_mod)$coefficients %>% dplyr::mutate(Model = "Full DSEM",
                                                                       Species = "ATF")
 atf_sem_AIC <- rep(AIC(atf_full_mod),length(summ_atf_sem[,1]))
 atf_sem_Rsd <- rep((summary(atf_full_mod)$recruitment_sd$R_sd),length(summ_atf_sem[,1])) #recruitment SD (sigmaR)
-atf_sem_deltaRsd <- rep((atf_sem_Rsd[1]-atf_iid_Rsd[1]),length(summ_atf_sem[,1]))
+atf_sem_deltaRsd <- rep((atf_iid_Rsd[1]-atf_sem_Rsd[1]),length(summ_atf_sem[,1]))
 
 summ_atf_sem_tran <- summary(atf_sem_tran)$coefficients %>% dplyr::mutate(Model = "Transport",
                                                                               Species = "ATF")
 atf_tran_AIC <- rep(AIC(atf_sem_tran),length(summ_atf_sem_tran[,1]))
 atf_tran_Rsd <- rep((summary(atf_sem_tran)$recruitment_sd$R_sd),length(summ_atf_sem_tran[,1])) #recruitment SD (sigmaR)
-atf_tran_deltaRsd <- rep((atf_tran_Rsd[1]-atf_iid_Rsd[1]),length(summ_atf_sem_tran[,1]))
+atf_tran_deltaRsd <- rep((atf_iid_Rsd[1]-atf_tran_Rsd[1]),length(summ_atf_sem_tran[,1]))
 
 summ_atf_sem_prey <- summary(atf_sem_prey)$coefficients %>% dplyr::mutate(Model = "Prey",
                                                                               Species = "ATF")
 atf_prey_AIC <- rep(AIC(atf_sem_prey),length(summ_atf_sem_prey[,1]))
 atf_prey_Rsd <- rep((summary(atf_sem_prey)$recruitment_sd$R_sd),length(summ_atf_sem_prey[,1])) #recruitment SD (sigmaR)
-atf_prey_deltaRsd <- rep((atf_prey_Rsd[1]-atf_iid_Rsd[1]),length(summ_atf_sem_prey[,1]))
+atf_prey_deltaRsd <- rep((atf_iid_Rsd[1]-atf_prey_Rsd[1]),length(summ_atf_sem_prey[,1]))
 
 summ_atf_sem_hab <- summary(atf_sem_hab)$coefficients %>% dplyr::mutate(Model = "Habitat",
                                                                             Species = "ATF")
 atf_hab_AIC <- rep(AIC(atf_sem_hab),length(summ_atf_sem_hab[,1]))
 atf_hab_Rsd <- rep((summary(atf_sem_hab)$recruitment_sd$R_sd),length(summ_atf_sem_hab[,1])) #recruitment SD (sigmaR)
-atf_hab_deltaRsd <- rep((atf_hab_Rsd[1]-atf_iid_Rsd[1]),length(summ_atf_sem_hab[,1]))
+atf_hab_deltaRsd <- rep((atf_iid_Rsd[1]-atf_hab_Rsd[1]),length(summ_atf_sem_hab[,1]))
 
 AICmod_ATF <- c(atf_iid_AIC, atf_dir_AIC, atf_sem_AIC, atf_tran_AIC, atf_prey_AIC, atf_hab_AIC)
 Rsdmod_ATF <- c(atf_iid_Rsd, atf_dir_Rsd, atf_sem_Rsd, atf_tran_Rsd, atf_prey_Rsd, atf_hab_Rsd)
@@ -568,25 +568,25 @@ summ_nork_dir <- summary(nork_direct_mod)$coefficients %>% dplyr::mutate(Model =
                                                                   Species = "NORK")
 nork_dir_AIC <- rep(AIC(nork_sem_dir),length(summ_nork_dir[,1]))
 nork_dir_Rsd <-  rep((summary(nork_direct_mod)$recruitment_sd$R_sd),length(summ_nork_dir[,1]))  #recruitment SD (sigmaR)
-nork_dir_deltaRsd <- rep((nork_dir_Rsd[1]-nork_iid_Rsd[1]),length(summ_nork_dir[,1])) #delta recruitment SD (subtract from IID model to see if dleta increases)
+nork_dir_deltaRsd <- rep((nork_iid_Rsd[1]-nork_dir_Rsd[1]),length(summ_nork_dir[,1])) #delta recruitment SD (subtract from IID model to see if dleta increases)
 
 summ_nork_sem <- summary(nork_full_mod)$coefficients %>% dplyr::mutate(Model = "Full DSEM",
                                                                    Species = "NORK")
 nork_full_AIC <- rep(AIC(nork_sem_full),length(summ_nork_sem[,1]))
 nork_full_Rsd <-  rep((summary(nork_full_mod)$recruitment_sd$R_sd),length(summ_nork_sem[,1]))  #recruitment SD (sigmaR)
-nork_full_deltaRsd <- rep((nork_full_Rsd[1]-nork_iid_Rsd[1]),length(summ_nork_sem[,1])) #delta recruitment SD (subtract from IID model to see if dleta increases)
+nork_full_deltaRsd <- rep((nork_iid_Rsd[1]-nork_full_Rsd[1]),length(summ_nork_sem[,1])) #delta recruitment SD (subtract from IID model to see if dleta increases)
 
 summ_nork_sem_tran <- summary(nork_sem_tran)$coefficients %>% dplyr::mutate(Model = "Transport",
                                                                                 Species = "NORK")
 nork_tran_AIC <- rep(AIC(nork_sem_tran),length(summ_nork_sem_tran[,1]))
 nork_tran_Rsd <-  rep((summary(nork_sem_tran)$recruitment_sd$R_sd),length(summ_nork_sem_tran[,1]))  #recruitment SD (sigmaR)
-nork_tran_deltaRsd <- rep((nork_tran_Rsd[1]-nork_iid_Rsd[1]),length(summ_nork_sem_tran[,1])) #delta recruitment SD (subtract from IID model to see if dleta increases)
+nork_tran_deltaRsd <- rep((nork_iid_Rsd[1]-nork_tran_Rsd[1]),length(summ_nork_sem_tran[,1])) #delta recruitment SD (subtract from IID model to see if dleta increases)
 
 summ_nork_sem_prey <- summary(nork_sem_prey)$coefficients %>% dplyr::mutate(Model = "Prey",
                                                                                 Species = "NORK")
 nork_prey_AIC <- rep(AIC(nork_sem_prey),length(summ_nork_sem_prey[,1]))
 nork_prey_Rsd <-  rep((summary(nork_sem_prey)$recruitment_sd$R_sd),length(summ_nork_sem_prey[,1]))  #recruitment SD (sigmaR)
-nork_prey_deltaRsd <- rep((nork_prey_Rsd[1]-nork_iid_Rsd[1]),length(summ_nork_sem_prey[,1])) #delta recruitment SD (subtract from IID model to see if dleta increases)
+nork_prey_deltaRsd <- rep((nork_iid_Rsd[1]-nork_prey_Rsd[1]),length(summ_nork_sem_prey[,1])) #delta recruitment SD (subtract from IID model to see if dleta increases)
 
 summ_nork_sem_hab <- summary(nork_sem_hab)$coefficients %>% dplyr::mutate(Model = "Habitat",
                                                                               Species = "NORK")
@@ -617,31 +617,31 @@ summ_pk_dir <- summary(pk_direct_mod)$coefficients %>% dplyr::mutate(Model = "Di
                                                           Species = "Pollock")
 pk_dir_AIC <- rep(AIC(pk_direct_mod),length(summ_pk_dir[,1]))
 pk_dir_Rsd <-  rep((summary(pk_direct_mod)$recruitment_sd$R_sd),length(summ_pk_dir[,1]))  #recruitment SD (sigmaR)
-pk_dir_deltaRsd <- rep((pk_dir_Rsd[1]-pk_iid_Rsd[1]),length(summ_pk_dir[,1])) #delta recruitment SD (subtract from IID model to see if dleta increases)
+pk_dir_deltaRsd <- rep((pk_iid_Rsd[1]-pk_dir_Rsd[1]),length(summ_pk_dir[,1])) #delta recruitment SD (subtract from IID model to see if dleta increases)
 
 summ_pk_sem <- summary(pk_full_mod)$coefficients %>% dplyr::mutate(Model = "Full DSEM",
                                                                    Species = "Pollock")
 pk_full_AIC <- rep(AIC(pk_full_mod),length(summ_pk_sem[,1]))
 pk_full_Rsd <-  rep((summary(pk_full_mod)$recruitment_sd$R_sd),length(summ_pk_sem[,1]))  #recruitment SD (sigmaR)
-pk_full_deltaRsd <- rep((pk_full_Rsd[1]-pk_iid_Rsd[1]),length(summ_pk_sem[,1])) #delta recruitment SD (subtract from IID model to see if dleta increases)
+pk_full_deltaRsd <- rep((pk_iid_Rsd[1]-pk_full_Rsd[1]),length(summ_pk_sem[,1])) #delta recruitment SD (subtract from IID model to see if dleta increases)
 
 summ_pk_sem_tran <- summary(pk_sem_tran)$coefficients %>% dplyr::mutate(Model = "Transport",
                                                                              Species = "Pollock")
 pk_tran_AIC <- rep(AIC(pk_sem_tran),length(summ_pk_sem_tran[,1]))
 pk_tran_Rsd <-  rep((summary(pk_sem_tran)$recruitment_sd$R_sd),length(summ_pk_sem_tran[,1]))  #recruitment SD (sigmaR)
-pk_tran_deltaRsd <- rep((pk_tran_Rsd[1]-pk_iid_Rsd[1]),length(summ_pk_sem_tran[,1])) #delta recruitment SD (subtract from IID model to see if dleta increases)
+pk_tran_deltaRsd <- rep((pk_iid_Rsd[1]-pk_tran_Rsd[1]),length(summ_pk_sem_tran[,1])) #delta recruitment SD (subtract from IID model to see if dleta increases)
 
 summ_pk_sem_prey <- summary(pk_sem_prey)$coefficients %>% dplyr::mutate(Model = "Prey",
                                                                              Species = "Pollock")
 pk_prey_AIC <- rep(AIC(pk_sem_prey),length(summ_pk_sem_prey[,1]))
 pk_prey_Rsd <-  rep((summary(pk_sem_prey)$recruitment_sd$R_sd),length(summ_pk_sem_prey[,1]))  #recruitment SD (sigmaR)
-pk_prey_deltaRsd <- rep((pk_prey_Rsd[1]-pk_iid_Rsd[1]),length(summ_pk_sem_prey[,1])) #delta recruitment SD (subtract from IID model to see if dleta increases)
+pk_prey_deltaRsd <- rep((pk_iid_Rsd[1]-pk_prey_Rsd[1]),length(summ_pk_sem_prey[,1])) #delta recruitment SD (subtract from IID model to see if dleta increases)
 
 summ_pk_sem_hab <- summary(pk_sem_hab)$coefficients %>% dplyr::mutate(Model = "Habitat",
                                                                            Species = "Pollock")
 pk_hab_AIC <- rep(AIC(pk_sem_hab),length(summ_pk_sem_hab[,1]))
 pk_hab_Rsd <-  rep((summary(pk_sem_hab)$recruitment_sd$R_sd),length(summ_pk_sem_hab[,1]))  #recruitment SD (sigmaR)
-pk_hab_deltaRsd <- rep((pk_hab_Rsd[1]-pk_iid_Rsd[1]),length(summ_pk_sem_hab[,1])) #delta recruitment SD (subtract from IID model to see if dleta increases)
+pk_hab_deltaRsd <- rep((pk_iid_Rsd[1]-pk_hab_Rsd[1]),length(summ_pk_sem_hab[,1])) #delta recruitment SD (subtract from IID model to see if dleta increases)
 
 #summarize results
 AICmod_pk <- c(pk_iid_AIC,pk_dir_AIC, pk_full_AIC, pk_tran_AIC, pk_prey_AIC, pk_hab_AIC)
@@ -666,31 +666,31 @@ summ_cod_dir <- summary(cod_direct_mod)$coefficients %>% dplyr::mutate(Model = "
                                                                   Species = "Cod")
 cod_dir_AIC <- rep(AIC(cod_direct_mod),length(summ_cod_dir[,1]))
 cod_dir_Rsd <-  rep((summary(cod_direct_mod)$recruitment_sd$R_sd),length(summ_cod_dir[,1]))  #recruitment SD (sigmaR)
-cod_dir_deltaRsd <- rep((cod_dir_Rsd[1]-cod_iid_Rsd[1]),length(summ_cod_dir[,1])) #delta recruitment SD (subtract from IID model to see if dleta increases)
+cod_dir_deltaRsd <- rep((cod_iid_Rsd[1]-cod_dir_Rsd[1]),length(summ_cod_dir[,1])) #delta recruitment SD (subtract from IID model to see if dleta increases)
 
 summ_cod_sem <- summary(cod_full_mod)$coefficients %>% dplyr::mutate(Model = "Full DSEM",
                                                                    Species = "Cod")
 cod_full_AIC <- rep(AIC(cod_full_mod),length(summ_cod_sem[,1]))
 cod_full_Rsd <-  rep((summary(cod_full_mod)$recruitment_sd$R_sd),length(summ_cod_sem[,1]))  #recruitment SD (sigmaR)
-cod_full_deltaRsd <- rep((cod_full_Rsd[1]-cod_iid_Rsd[1]),length(summ_cod_sem[,1])) #delta recruitment SD (subtract from IID model to see if dleta increases)
+cod_full_deltaRsd <- rep((cod_iid_Rsd[1]-cod_full_Rsd[1]),length(summ_cod_sem[,1])) #delta recruitment SD (subtract from IID model to see if dleta increases)
 
 summ_cod_sem_tran <- summary(cod_sem_tran)$coefficients %>% dplyr::mutate(Model = "Transport",
                                                                                Species = "Cod")
 cod_tran_AIC <- rep(AIC(cod_sem_tran),length(summ_cod_sem_tran[,1]))
 cod_tran_Rsd <-  rep((summary(cod_sem_tran)$recruitment_sd$R_sd),length(summ_cod_sem_tran[,1]))  #recruitment SD (sigmaR)
-cod_tran_deltaRsd <- rep((cod_tran_Rsd[1]-cod_iid_Rsd[1]),length(summ_cod_sem_tran[,1])) #delta recruitment SD (subtract from IID model to see if dleta increases)
+cod_tran_deltaRsd <- rep((cod_iid_Rsd[1]-cod_tran_Rsd[1]),length(summ_cod_sem_tran[,1])) #delta recruitment SD (subtract from IID model to see if dleta increases)
 
 summ_cod_sem_prey <- summary(cod_sem_prey)$coefficients %>% dplyr::mutate(Model = "Prey",
                                                                                Species = "Cod")
 cod_prey_AIC <- rep(AIC(cod_sem_prey),length(summ_cod_sem_prey[,1]))
 cod_prey_Rsd <-  rep((summary(cod_sem_prey)$recruitment_sd$R_sd),length(summ_cod_sem_prey[,1]))  #recruitment SD (sigmaR)
-cod_prey_deltaRsd <- rep((cod_prey_Rsd[1]-cod_iid_Rsd[1]),length(summ_cod_sem_prey[,1])) #delta recruitment SD (subtract from IID model to see if dleta increases)
+cod_prey_deltaRsd <- rep((cod_iid_Rsd[1]-cod_prey_Rsd[1]),length(summ_cod_sem_prey[,1])) #delta recruitment SD (subtract from IID model to see if dleta increases)
 
 summ_cod_sem_hab <- summary(cod_sem_hab)$coefficients %>% dplyr::mutate(Model = "Habitat",
                                                                              Species = "Cod")
 cod_hab_AIC <- rep(AIC(cod_sem_hab),length(summ_cod_sem_hab[,1]))
 cod_hab_Rsd <-  rep((summary(cod_sem_hab)$recruitment_sd$R_sd),length(summ_cod_sem_hab[,1]))  #recruitment SD (sigmaR)
-cod_hab_deltaRsd <- rep((cod_hab_Rsd[1]-cod_iid_Rsd[1]),length(summ_cod_sem_hab[,1])) #delta recruitment SD (subtract from IID model to see if dleta increases)
+cod_hab_deltaRsd <- rep((cod_iid_Rsd[1]-cod_hab_Rsd[1]),length(summ_cod_sem_hab[,1])) #delta recruitment SD (subtract from IID model to see if dleta increases)
 
 # summarize results
 Rsdmod_cod <- c(cod_iid_Rsd, cod_dir_Rsd, cod_full_Rsd, cod_tran_Rsd, cod_prey_Rsd, cod_hab_Rsd)
