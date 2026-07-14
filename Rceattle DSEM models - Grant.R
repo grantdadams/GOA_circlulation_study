@@ -178,11 +178,7 @@ nork_iid_mod <- Rceattle::fit_mod(data_list = nrdata,
                                 family = "fixed",
                                 sigmaR_prior_sd = 0.5
                               ),
-                              M1Fun = build_M1(updateM1 = TRUE,
-                                               M1_model     = 1,
-                                               M1_use_prior = TRUE,
-                                               M_prior      = 0.06,
-                                               M_prior_sd   = 0.05),
+                              M1Fun = build_M1(updateM1 = FALSE, M1_model = 0),
                               fit_control = fit_control(
                                 verbose = 1,
                                 phase = TRUE))
@@ -199,11 +195,7 @@ nork_direct_mod <- Rceattle::fit_mod(data_list = nrdata,
                                     family = "fixed",
                                     sigmaR_prior_sd = 0.5
                                   ),
-                                  M1Fun = build_M1(updateM1 = TRUE,
-                                                   M1_model     = 1,
-                                                   M1_use_prior = TRUE,
-                                                   M_prior      = 0.06,
-                                                   M_prior_sd   = 0.05),
+                                  M1Fun = build_M1(updateM1 = FALSE, M1_model = 0),
                                   fit_control = fit_control(
                                     verbose = 1,
                                     phase = TRUE))
@@ -220,11 +212,7 @@ nork_full_mod <- Rceattle::fit_mod(data_list = nrdata,
                                     family = "fixed",
                                     sigmaR_prior_sd = 0.5
                                   ),
-                                  M1Fun = build_M1(updateM1 = TRUE,
-                                                   M1_model     = 1,
-                                                   M1_use_prior = TRUE,
-                                                   M_prior      = 0.06,
-                                                   M_prior_sd   = 0.05),
+                                  M1Fun = build_M1(updateM1 = FALSE, M1_model = 0),
                                   fit_control = fit_control(
                                     verbose = 1,
                                     phase = TRUE))
@@ -241,11 +229,7 @@ nork_sem_tran <- Rceattle::fit_mod(data_list = nrdata,
                                      family = "fixed",
                                      sigmaR_prior_sd = 0.5
                                    ),
-                                   M1Fun = build_M1(updateM1 = TRUE,
-                                                    M1_model     = 1,
-                                                    M1_use_prior = TRUE,
-                                                    M_prior      = 0.06,
-                                                    M_prior_sd   = 0.05),
+                                   M1Fun = build_M1(updateM1 = FALSE, M1_model = 0),
                                    fit_control = fit_control(
                                      verbose = 1,
                                      phase = TRUE))
@@ -262,11 +246,7 @@ nork_sem_prey <- Rceattle::fit_mod(data_list = nrdata,
                                      family = "fixed",
                                      sigmaR_prior_sd = 0.5
                                    ),
-                                   M1Fun = build_M1(updateM1 = TRUE,
-                                                    M1_model     = 1,
-                                                    M1_use_prior = TRUE,
-                                                    M_prior      = 0.06,
-                                                    M_prior_sd   = 0.05),
+                                   M1Fun = build_M1(updateM1 = FALSE, M1_model = 0),
                                    fit_control = fit_control(
                                      verbose = 1,
                                      phase = TRUE))
@@ -283,11 +263,7 @@ nork_sem_hab <- Rceattle::fit_mod(data_list = nrdata,
                                      family = "fixed",
                                      sigmaR_prior_sd = 0.5
                                    ),
-                                   M1Fun = build_M1(updateM1 = TRUE,
-                                                    M1_model     = 1,
-                                                    M1_use_prior = TRUE,
-                                                    M_prior      = 0.06,
-                                                    M_prior_sd   = 0.05),
+                                   M1Fun = build_M1(updateM1 = FALSE, M1_model = 0),
                                    fit_control = fit_control(
                                      verbose = 1,
                                      phase = TRUE))
@@ -560,19 +536,19 @@ write.csv(results_ATF, file = "Results/Initial_DSEM_atf.csv")
 # - NORK
 summ_nork_iid <- summary(nork_iid_mod)$coefficients %>% dplyr::mutate(Model = "IID",
                                                                       Species = "NORK")
-nork_iid_AIC <- rep(AIC(nork_sem_iid),length(summ_nork_iid[,1]))
+nork_iid_AIC <- rep(AIC(nork_iid_mod),length(summ_nork_iid[,1]))
 nork_iid_Rsd <-  rep((summary(nork_iid_mod)$recruitment_sd$R_sd),length(summ_nork_iid[,1]))  #recruitment SD (sigmaR)
 nork_iid_deltaRsd <- rep((nork_iid_Rsd[1]-nork_iid_Rsd[1]),length(summ_nork_iid[,1])) #delta recruitment SD (subtract from IID model to see if dleta increases)
 
 summ_nork_dir <- summary(nork_direct_mod)$coefficients %>% dplyr::mutate(Model = "Direct DSEM",
                                                                   Species = "NORK")
-nork_dir_AIC <- rep(AIC(nork_sem_dir),length(summ_nork_dir[,1]))
+nork_dir_AIC <- rep(AIC(nork_direct_mod),length(summ_nork_dir[,1]))
 nork_dir_Rsd <-  rep((summary(nork_direct_mod)$recruitment_sd$R_sd),length(summ_nork_dir[,1]))  #recruitment SD (sigmaR)
 nork_dir_deltaRsd <- rep((nork_iid_Rsd[1]-nork_dir_Rsd[1]),length(summ_nork_dir[,1])) #delta recruitment SD (subtract from IID model to see if dleta increases)
 
 summ_nork_sem <- summary(nork_full_mod)$coefficients %>% dplyr::mutate(Model = "Full DSEM",
                                                                    Species = "NORK")
-nork_full_AIC <- rep(AIC(nork_sem_full),length(summ_nork_sem[,1]))
+nork_full_AIC <- rep(AIC(nork_full_mod),length(summ_nork_sem[,1]))
 nork_full_Rsd <-  rep((summary(nork_full_mod)$recruitment_sd$R_sd),length(summ_nork_sem[,1]))  #recruitment SD (sigmaR)
 nork_full_deltaRsd <- rep((nork_iid_Rsd[1]-nork_full_Rsd[1]),length(summ_nork_sem[,1])) #delta recruitment SD (subtract from IID model to see if dleta increases)
 
@@ -592,14 +568,14 @@ summ_nork_sem_hab <- summary(nork_sem_hab)$coefficients %>% dplyr::mutate(Model 
                                                                               Species = "NORK")
 nork_hab_AIC <- rep(AIC(nork_sem_hab),length(summ_nork_sem_hab[,1]))
 nork_hab_Rsd <-  rep((summary(nork_sem_hab)$recruitment_sd$R_sd),length(summ_nork_sem_hab[,1]))  #recruitment SD (sigmaR)
-nork_hab_deltaRsd <- rep((nork_hab_Rsd[1]-nork_iid_Rsd[1]),length(summ_nork_sem_hab[,1])) #delta recruitment SD (subtract from IID model to see if dleta increases)
+nork_hab_deltaRsd <- rep((nork_iid_Rsd[1]-nork_hab_Rsd[1]),length(summ_nork_sem_hab[,1])) #delta recruitment SD (subtract from IID model to see if dleta increases)
 
 #summarize results
-AICmod_NORK <- c(nork_iid_AIC,nork_dir_AIC, nork_sem_AIC, nork_tran_AIC, nork_prey_AIC, nork_hab_AIC)
-Rsdmod_NORK <- c(nork_iid_Rsd, atf_dir_Rsd, nork_sem_Rsd, nork_tran_Rsd, nork_prey_Rsd, nork_hab_Rsd)
-deltaRsdmod_NORK <- c(nork_iid_deltaRsd, nork_dir_deltaRsd, nork_sem_deltaRsd, nork_tran_deltaRsd, nork_prey_deltaRsd, nork_hab_deltaRsd)
+AICmod_NORK <- c(nork_iid_AIC, nork_dir_AIC, nork_full_AIC, nork_tran_AIC, nork_prey_AIC, nork_hab_AIC)
+Rsdmod_NORK <- c(nork_iid_Rsd, nork_dir_Rsd, nork_full_Rsd, nork_tran_Rsd, nork_prey_Rsd, nork_hab_Rsd)
+deltaRsdmod_NORK <- c(nork_iid_deltaRsd, nork_dir_deltaRsd, nork_full_deltaRsd, nork_tran_deltaRsd, nork_prey_deltaRsd, nork_hab_deltaRsd)
 
-results_NORK <- do.call("rbind", list(summ_nork, summ_nork_iid, summ_nork_sem, summ_nork_sem_tran, summ_nork_sem_prey, summ_nork_sem_hab))
+results_NORK <- do.call("rbind", list(summ_nork_iid, summ_nork_dir, summ_nork_sem, summ_nork_sem_tran, summ_nork_sem_prey, summ_nork_sem_hab))
 results_NORK$AIC <- AICmod_NORK
 results_NORK$Rec_sd <- Rsdmod_NORK
 results_NORK$deltaRsd <-deltaRsdmod_NORK
