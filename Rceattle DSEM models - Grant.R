@@ -16,6 +16,7 @@ atfdata <- Rceattle::read_data( file = "data/2023_GOA_arrowtooth.xlsx")
 pkdata <- Rceattle::read_data( file = "Data/2024_GOA_pollock.xlsx")
 pcoddata <- Rceattle::read_data( file = "Data/2024_GOA_pcod.xlsx")
 nrdata <- Rceattle::read_data(file = "Data/2024_GOA_northern_rockfish.xlsx")
+nrdata$styr <- 1978 # Setting to
 
 # * Combine stock and environmental data ----
 atfdata$env_data <- atfdata$env_data %>%
@@ -163,6 +164,7 @@ atf_sem_hab <- Rceattle::fit_mod(data_list = atfdata,
 save(atf_sem_hab, file = "atf_sem_hab.Rdata")
 gc() #clear memory
 
+
 # * Northern rockfish ----
 # - Estimate M with lognormal prior (urm: mean_M = 0.06, cv_M = 0.05).
 #   urm ESTIMATES M (log_M is a free parameter with this prior), so this is the
@@ -249,7 +251,7 @@ nork_sem_prey <- Rceattle::fit_mod(data_list = nrdata,
                                    M1Fun = build_M1(updateM1 = FALSE, M1_model = 0),
                                    fit_control = fit_control(
                                      verbose = 1,
-                                     phase = TRUE))
+                                     phase = FALSE))
 save(nork_sem_prey, file = "nork_sem_prey.Rdata")
 gc() #clear memory
 
@@ -269,6 +271,7 @@ nork_sem_hab <- Rceattle::fit_mod(data_list = nrdata,
                                      phase = TRUE))
 save(nork_sem_hab, file = "nork_sem_hab.Rdata")
 gc() #clear memory
+
 
 # * Pollock ----
 load("pk_iid_mod.Rdata")

@@ -75,6 +75,8 @@ atfsem = "
   # --- Recruitment variance ---
   recdevs1 <-> recdevs1,                                0,  sigmaR1,          1
 "
+
+# * Transport sem ----
 atfsem_tran = "
   # source                  link  target,                    lag param_name        start
   # ------------------------------------------------------------------------------------
@@ -97,6 +99,8 @@ atfsem_tran = "
   # --- Recruitment variance ---
   recdevs1 <-> recdevs1,                                0,  sigmaR1,          1
 "
+
+# * Prey sem ----
 atfsem_prey = "
   # source                  link  target,                    lag param_name        start
   # ------------------------------------------------------------------------------------
@@ -124,6 +128,8 @@ atfsem_prey = "
   # --- Recruitment variance ---
   recdevs1 <-> recdevs1,                                0,  sigmaR1,          1
 "
+
+# * Habitat sem ----
 atfsem_hab = "
   # source                  link  target,                    lag param_name        start
   # ------------------------------------------------------------------------------------
@@ -223,6 +229,8 @@ norksem = "
   # --- Recruitment variance ---
   recdevs1 <-> recdevs1,                                0,  sigmaR1,          1
 "
+
+# * Transport sem ----
 norksem_tran = "
   # source                  link  target,                    lag param_name        start
   # ------------------------------------------------------------------------------------
@@ -245,6 +253,8 @@ norksem_tran = "
   # --- Recruitment variance ---
   recdevs1 <-> recdevs1,                                0,  sigmaR1,          1
 "
+
+# * Prey sem ----
 norksem_prey = "
   # source                  link  target,                    lag param_name        start
   # ------------------------------------------------------------------------------------
@@ -273,6 +283,8 @@ norksem_prey = "
   # --- Recruitment variance ---
   recdevs1 <-> recdevs1,                                0,  sigmaR1,          1
 "
+
+# * Habitat sem ----
 norksem_hab = "
   # source                  link  target,                    lag param_name        start
   # ------------------------------------------------------------------------------------
@@ -377,6 +389,8 @@ pollocksem = "
   # --- Recruitment variance ---
   recdevs1 <-> recdevs1,                                0,  sigmaR1,          1
 "
+
+# * Transport sem ----
 pollocksem_tran = "
   # source                  link  target,                    lag param_name        start
   # ------------------------------------------------------------------------------------
@@ -403,6 +417,8 @@ pollocksem_tran = "
   # --- Recruitment variance ---
   recdevs1 <-> recdevs1,                                0,  sigmaR1,          1
 "
+
+# * Prey sem ----
 pollocksem_prey = "
   # source                  link  target,                    lag param_name        start
   # ------------------------------------------------------------------------------------
@@ -430,6 +446,8 @@ pollocksem_prey = "
   # --- Recruitment variance ---
   recdevs1 <-> recdevs1,                                0,  sigmaR1,          1
 "
+
+# * Habitat sem ----
 pollocksem_hab = "
   # source                  link  target,                    lag param_name        start
   # ------------------------------------------------------------------------------------
@@ -533,6 +551,8 @@ pcodsem = "
   # --- Recruitment variance ---
   recdevs1 <-> recdevs1,                                0,  sigmaR1,          1
 "
+
+# * Transport sem ----
 pcodsem_tran = "
   # source                  link  target,                    lag param_name        start
   # ------------------------------------------------------------------------------------
@@ -556,6 +576,8 @@ pcodsem_tran = "
   # --- Recruitment variance ---
   recdevs1 <-> recdevs1,                                0,  sigmaR1,          1
 "
+
+# * Prey sem ----
 pcodsem_prey = "
   # source                  link  target,                    lag param_name        start
   # ------------------------------------------------------------------------------------
@@ -583,6 +605,8 @@ pcodsem_prey = "
   # --- Recruitment variance ---
   recdevs1 <-> recdevs1,                                0,  sigmaR1,          1
 "
+
+# * Habitat sem ----
 pcodsem_hab = "
   # source                  link  target,                    lag param_name        start
   # ------------------------------------------------------------------------------------
