@@ -16,7 +16,7 @@ atfdata <- Rceattle::read_data( file = "data/2023_GOA_arrowtooth.xlsx")
 pkdata <- Rceattle::read_data( file = "Data/2024_GOA_pollock.xlsx")
 pcoddata <- Rceattle::read_data( file = "Data/2024_GOA_pcod.xlsx")
 nrdata <- Rceattle::read_data(file = "Data/2024_GOA_northern_rockfish.xlsx")
-nrdata$styr <- 1978 # Setting to
+nrdata$styr <- 1987 # original 1978 but shortened to 1987 to help DSEM submodels converge (NROCK was the only species of the four that had convergence issues)
 
 # * Combine stock and environmental data ----
 atfdata$env_data <- atfdata$env_data %>%
@@ -170,6 +170,13 @@ gc() #clear memory
 #   urm ESTIMATES M (log_M is a free parameter with this prior), so this is the
 #   configuration directly comparable to the urm reference model.
 #   M_prior_sd is log-scale (= cv_M = 0.05), matching urm's dnorm(log(M), ...).
+load("nork_iid_mod.Rdata")
+load("nork_direct_mod.Rdata")
+load("nork_full_mod.Rdata")
+load("nork_sem_tran.Rdata")
+load("nork_sem_prey.Rdata")
+load("nork_sem_hab.Rdata")
+
 nork_iid_mod <- Rceattle::fit_mod(data_list = nrdata,
                               estimateMode = 0,
                               random_rec = TRUE,
