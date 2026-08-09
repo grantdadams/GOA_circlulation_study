@@ -461,13 +461,9 @@ pollocksem_hab = "
 
   # --- GOADI (spring) ---
   GOADIr_spring            ->  SST_WGOA_spring,          0,  GOADIr_to_SST,     0
-  GOADIr_spring            ->  Wind_WGOA_spring,         0,  GOADIr_to_Wind,    0
-  GOADIr_spring            ->  Upwelling_WGOA_spring,    0,  GOADIr_to_Up,      0
 
   # --- NGAO (spring) ---
   NGAOr_spring             ->  SST_WGOA_spring,          0,  NGAOr_to_SST,      0
-  NGAOr_spring             ->  Wind_WGOA_spring,         0,  NGAOr_to_Wind,     0
-  NGAOr_spring             ->  Upwelling_WGOA_spring,    0,  NGAOr_to_Up,       0
 
   # --- Recruitment ---
   SST_WGOA_spring         ->  recdevs1,                 1,  SST_to_R,         0
