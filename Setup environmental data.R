@@ -65,7 +65,10 @@ goadi_annual <- goadi %>%
 envdata <- read.csv("Data/RecrClimDSEMdata.csv")
 
 envdata  <- envdata %>%
-  dplyr::mutate(post2014 = year >= 2014 & year <= 2016) %>%
+  # Elevated-M block, 2014-2016 only (despite the name). Numeric 0/1, not
+  # logical: model.matrix() names a logical column's design column
+  # "post2014TRUE", which would not match the `init`/`priors` keys in M1_block.
+  dplyr::mutate(post2014 = as.numeric(year >= 2014 & year <= 2016)) %>%
   dplyr::rename(Year = year) %>%
   full_join(goadi_annual) %>%
   full_join(ngao_annual) %>%

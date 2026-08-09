@@ -19,25 +19,34 @@ nrdata <- Rceattle::read_data(file = "Data/2024_GOA_northern_rockfish.xlsx")
 nrdata$styr <- 1978 # Setting to
 
 # * Combine stock and environmental data ----
+# envdata reaches back to 1968, earlier than any of the four stocks start. Trim
+# each stock's env_data to its own styr: linkage design matrices align by ROW
+# POSITION, so a covariate series that starts before styr shifts every linkage
+# forward by the difference. (The DSEM joins on Year and is unaffected, but the
+# Pcod M block is a linkage -- see M1_block in "Setup environmental data.R".)
 atfdata$env_data <- atfdata$env_data %>%
   select(Year, BTempC) %>%
   full_join(envdata, by = "Year") %>%
-  arrange(Year)
+  arrange(Year) %>%
+  filter(Year >= atfdata$styr)
 
 pkdata$env_data <- pkdata$env_data %>%
   select(Year, QcovPol) %>%
   full_join(envdata, by = "Year") %>%
-  arrange(Year)
+  arrange(Year) %>%
+  filter(Year >= pkdata$styr)
 
 pcoddata$env_data <- pcoddata$env_data %>%
   select(Year, CFSR_2022) %>%
   full_join(envdata, by = "Year") %>%
-  arrange(Year)
+  arrange(Year) %>%
+  filter(Year >= pcoddata$styr)
 
 nrdata$env_data <- nrdata$env_data %>%
   select(Year, Temp, StartDateDev, Interaction) %>%
   full_join(envdata, by = "Year") %>%
-  arrange(Year)
+  arrange(Year) %>%
+  filter(Year >= nrdata$styr)
 
 plot_data(nrdata)
 
