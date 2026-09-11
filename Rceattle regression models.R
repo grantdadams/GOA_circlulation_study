@@ -76,22 +76,42 @@ atf23$fleet_control$Index_sd_prior <- 1
 
 
 # * Combine stock and environmental data ----
+# Linkages read env_data by row position (row r is model year styr + r - 1) and refuse a
+# missing year, so each stock's covariates start at its own styr, and a covariate's
+# missing years take its mean over all years, as Rceattle's pre-4.4 env_index did.
+fill_env <- function(env, styr) {
+    env <- merge(data.frame(Year = seq(min(styr, min(env$Year)), max(env$Year))), env,
+                 by = "Year", all.x = TRUE)
+    num <- vapply(env, is.numeric, logical(1)) & names(env) != "Year"
+    env[num] <- lapply(env[num], function(x) replace(x, is.na(x), mean(x, na.rm = TRUE)))
+    env <- env[env$Year >= styr, , drop = FALSE]
+    rownames(env) <- NULL
+    env
+}
 pcod24$env_data <- pcod24$env_data %>%
     full_join(goadi_annual) %>%
-    full_join(ngao_annual)
+    full_join(ngao_annual) %>%
+    fill_env(pcod24$styr)
 
 pollock24$env_data <- pollock24$env_data %>%
     full_join(goadi_annual) %>%
-    full_join(ngao_annual)
+    full_join(ngao_annual) %>%
+    fill_env(pollock24$styr)
 
 atf23$env_data <- atf23$env_data %>%
     full_join(goadi_annual) %>%
-    full_join(ngao_annual)
+    full_join(ngao_annual) %>%
+    fill_env(atf23$styr)
 
 nrfish24$env_data <- nrfish24$env_data %>%
     full_join(goadi_annual) %>%
-    full_join(ngao_annual)
+    full_join(ngao_annual) %>%
+    fill_env(nrfish24$styr)
 
+
+# srr_indices = k meant env_data column k + 1 (the count starts after Year). Rceattle now
+# fits that log-linear recruitment effect as an R0 linkage on the same covariate.
+env_R0 <- function(dat, k) list(R0 = linkage_spec(reformulate(colnames(dat$env_data)[k + 1])))
 
 # 2) Fit models ----
 
@@ -118,7 +138,7 @@ cod_models[[1]] <- Rceattle::fit_mod(data_list = pcod24,
                                      phase = TRUE)
 
 
-avg_F <- (exp(cod_models[[1]]$estimated_params$ln_F)) # Average F from last 2 years
+avg_F <- (exp(cod_models[[1]]$estimated_params$log_F)) # Average F from last 2 years
 avg_F <- rowMeans(avg_F[,(ncol(avg_F)-2) : ncol(avg_F)])
 f_ratio <- avg_F/sum(avg_F)
 pcod24$fleet_control$proj_F_prop <- f_ratio
@@ -150,8 +170,8 @@ for(i in 1:length(cod_indices)){
                                                   M2_use_prior = FALSE),
                                  random_rec = TRUE, # No random recruitment
                                  recFun = build_srr(
-                                     srr_fun = 1,
-                                     srr_indices = c(cod_indices[i])), # Winter_GOADI
+                                     srr_fun = 0,
+                                     linkages = env_R0(pcod24, cod_indices[i])), # Winter_GOADI
                                  initMode = 1,
                                  phase = FALSE,
                                  HCR = build_hcr(HCR = 5, # Tier3 HCR
@@ -194,8 +214,8 @@ for(i in 1:length(pk_indices)){
 
                                 verbose = 1,
                                 recFun = build_srr(
-                                    srr_fun = 1,
-                                    srr_indices = c(pk_indices[i])),
+                                    srr_fun = 0,
+                                    linkages = env_R0(pollock24, pk_indices[i])),
                                 initMode = 1,
                                 phase = FALSE,
                                 HCR = build_hcr(HCR = 5, # Tier3 HCR
@@ -240,8 +260,8 @@ for(i in 1:length(atf_indices)){
                                            estimateMode = 0, # Estimate
                                            random_rec = FALSE, # No random recruitment
                                            recFun = build_srr(
-                                               srr_fun = 1, # R_y = R_mu * exp(B * X + e_y)
-                                               srr_indices = c(atf_indices[i])),
+                                               srr_fun = 0, # R_y = R_mu * exp(B * X + e_y)
+                                               linkages = env_R0(atf23, atf_indices[i])),
                                            verbose = 1,
                                            phase = FALSE,
                                            initMode = 2,
@@ -257,8 +277,8 @@ for(i in 1:length(atf_indices)){
                                            estimateMode = 0, # Estimate
                                            random_rec = TRUE, # No random recruitment
                                            recFun = build_srr(
-                                               srr_fun = 1, # R_y = R_mu * exp(B * X + e_y)
-                                               srr_indices = c(atf_indices[i])),
+                                               srr_fun = 0, # R_y = R_mu * exp(B * X + e_y)
+                                               linkages = env_R0(atf23, atf_indices[i])),
                                            verbose = 1,
                                            phase = FALSE,
                                            initMode = 2,
@@ -309,8 +329,8 @@ for(i in 1:length(nrfish_indices)){
                                     random_rec = TRUE, # No random recruitment
                                     verbose = 1,
                                     recFun = build_srr(
-                                        srr_fun = 1,
-                                        srr_indices = c(nrfish_indices[i])),
+                                        srr_fun = 0,
+                                        linkages = env_R0(nrfish24, nrfish_indices[i])),
                                     initMode = 1, # Assume unfished equilibrium
                                     M1Fun = build_M1(updateM1 = TRUE,
                                                      M1_model = 1,
@@ -347,8 +367,8 @@ cod_pm <- data.frame(Species = "Cod",
                      Model = c("Base", colnames(pcod24$env_data)[cod_indices+1]),
                      AIC = sapply(cod_models, function(x) x$opt$AIC),
                      dAIC = sapply(cod_models, function(x) x$opt$AIC) - min(sapply(cod_models, function(x) x$opt$AIC)),
-                     Beta = sapply(cod_models, function(x) sum(x$estimated_params$beta_rec_pars)), # Using sum because no other betas are used
-                     SigmaR = sapply(cod_models, function(x) exp(x$estimated_params$R_ln_sd)),
+                     Beta = sapply(cod_models, function(x) sum(x$estimated_params$beta_linkage)), # The linkage intercept is fixed at 0, so this is the slope
+                     SigmaR = sapply(cod_models, function(x) exp(x$estimated_params$R_log_sd)),
                      ABC_1yr = sapply(cod_models, function(x) get_ABC(x, year = 1)),
                      ABC_2yr = sapply(cod_models, function(x) get_ABC(x, year = 2))
                      # Mohns_SSB = sapply(cod_retro, function(x) x$mohns[5,4]),
@@ -383,8 +403,8 @@ pk_pm <- data.frame(Species = "Pollock",
                     Model = c("Base", colnames(pollock24$env_data)[pk_indices+1]),
                     AIC = sapply(pk_models, function(x) x$opt$AIC),
                     dAIC = sapply(pk_models, function(x) x$opt$AIC) - min(sapply(pk_models, function(x) x$opt$AIC)),
-                    Beta = sapply(pk_models, function(x) sum(x$estimated_params$beta_rec_pars)), # Using sum because no other betas are used
-                    SigmaR = sapply(pk_models, function(x) exp(x$estimated_params$R_ln_sd)),
+                    Beta = sapply(pk_models, function(x) sum(x$estimated_params$beta_linkage)), # The linkage intercept is fixed at 0, so this is the slope
+                    SigmaR = sapply(pk_models, function(x) exp(x$estimated_params$R_log_sd)),
                     ABC_1yr = sapply(pk_models, function(x) get_ABC(x, year = 1)),
                     ABC_2yr = sapply(pk_models, function(x) get_ABC(x, year = 2))
                     # Mohns_SSB = sapply(pk_retro, function(x) x$mohns[5,4]),
@@ -419,8 +439,8 @@ atf_pm <- data.frame(Species = "ATF",
                      Model = c("Base", colnames(atf23$env_data)[atf_indices+1]),
                      AIC = sapply(atf_models, function(x) x$opt$AIC),
                      dAIC = sapply(atf_models, function(x) x$opt$AIC) - min(sapply(atf_models, function(x) x$opt$AIC)),
-                     Beta = sapply(atf_models, function(x) sum(x$estimated_params$beta_rec_pars)), # Using sum because no other betas are used
-                     SigmaR = sapply(atf_models, function(x) exp(x$estimated_params$R_ln_sd)),
+                     Beta = sapply(atf_models, function(x) sum(x$estimated_params$beta_linkage)), # The linkage intercept is fixed at 0, so this is the slope
+                     SigmaR = sapply(atf_models, function(x) exp(x$estimated_params$R_log_sd)),
                      ABC_1yr = sapply(atf_models, function(x) get_ABC(x, year = 1)),
                      ABC_2yr = sapply(atf_models, function(x) get_ABC(x, year = 2)),
                      Mohns_SSB = sapply(atf_retro, function(x) x$mohns[5,4]),
@@ -455,8 +475,8 @@ nrfish_pm <- data.frame(Species = "Northern rock fish",
                         Model = c("Base", colnames(nrfish24$env_data)[nrfish_indices+1]),
                         AIC = sapply(nrfish_models, function(x) x$opt$AIC),
                         dAIC = sapply(nrfish_models, function(x) x$opt$AIC) - min(sapply(nrfish_models, function(x) x$opt$AIC)),
-                        Beta = sapply(nrfish_models, function(x) sum(x$estimated_params$beta_rec_pars)), # Using sum because no other betas are used
-                        SigmaR = sapply(nrfish_models, function(x) exp(x$estimated_params$R_ln_sd)),
+                        Beta = sapply(nrfish_models, function(x) sum(x$estimated_params$beta_linkage)), # The linkage intercept is fixed at 0, so this is the slope
+                        SigmaR = sapply(nrfish_models, function(x) exp(x$estimated_params$R_log_sd)),
                         ABC_1yr = sapply(nrfish_models, function(x) get_ABC(x, year = 1)),
                         ABC_2yr = sapply(nrfish_models, function(x) get_ABC(x, year = 2))
                         # Mohns_SSB = sapply(nrfish_retro, function(x) x$mohns[5,4]),
