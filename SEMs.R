@@ -625,7 +625,6 @@ pcodsem_hab = "
   NGAOr_spring             ->  Upwelling_WGOA_spring,    0,  NGAOr_to_Up,       0
 
   # --- Intermediaries ---
-  SST_WGOA_spring         ->  Copepods_small_spring,    0,  SST_to_Cop,       0
   Upwelling_WGOA_spring   ->  BottomTemp_WGOA_winter,   0,  Up_to_BT,         0
 
   # --- Recruitment ---
