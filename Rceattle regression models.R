@@ -72,7 +72,7 @@ pcod24 <- Rceattle::read_data( file = "Data/2024_GOA_pcod.xlsx")
 nrfish24 <- Rceattle::read_data(file = "Data/2024_GOA_northern_rockfish.xlsx")
 
 atf23$fleet_control$Estimate_index_sd <- 0
-atf23$fleet_control$Index_sd_prior <- 1
+atf23$fleet_control$Index_sd <- 1
 
 
 # * Combine stock and environmental data ----
@@ -141,7 +141,7 @@ cod_models[[1]] <- Rceattle::fit_mod(data_list = pcod24,
 avg_F <- (exp(cod_models[[1]]$estimated_params$log_F)) # Average F from last 2 years
 avg_F <- rowMeans(avg_F[,(ncol(avg_F)-2) : ncol(avg_F)])
 f_ratio <- avg_F/sum(avg_F)
-pcod24$fleet_control$proj_F_prop <- f_ratio
+pcod24$fleet_control$Proj_F_proportion <- f_ratio
 
 # - Fit with projection
 cod_models[[1]] <- Rceattle::fit_mod(data_list = pcod24,
@@ -189,7 +189,7 @@ pk_models <- list()
 pk_indices <- c(5,3,4,9,7,8)
 
 # * Base ----
-pollock24$fleet_control$proj_F_prop <- 1
+pollock24$fleet_control$Proj_F_proportion <- 1
 pk_models[[1]] <- fit_mod(data_list = pollock24,
                           inits = NULL, # Initial parameters = 0
 
@@ -233,7 +233,7 @@ atf_indices <- c(5,3,4,9,7,8)
 # ATF: fall ( of year prior to spawn or lag1) winter, spring, summer
 
 # * Base ----
-atf23$fleet_control$proj_F_prop <- 1
+atf23$fleet_control$Proj_F_proportion <- 1
 atf_models[[1]] <- Rceattle::fit_mod(data_list = atf23,
                                      inits = NULL, # Initial parameters = 0
                                      file = NULL , #"Models/ss", # Don't save
@@ -297,7 +297,7 @@ nrfish24$env_data  <- nrfish24$env_data %>%
 nrfish_indices <- c(4,2,3,8,6,7)
 
 nrfish_models <- list()
-nrfish24$fleet_control$proj_F_prop <- 1
+nrfish24$fleet_control$Proj_F_proportion <- 1
 nrfish_models[[1]] <- Rceattle::fit_mod(data_list = nrfish24,
                                         inits = NULL, # Initial parameters = 0
                                         file = NULL, # Don't save
