@@ -475,26 +475,34 @@ save(cod_full_mod, file = "Models/cod_full_mod.Rdata")
 gc() #clear memory
 
 
-cod_sem_tran <- Rceattle::fit_mod(data_list = pcoddata,
-                                  inits = cod_inits, # SS3's MLE -- see the bundle note
-                                  estimateMode = 0, # Estimate
-                                  initMode  = codbundle$initMode,
-                                  growthFun = codbundle$growthFun,
-                                  M1Fun     = codbundle$M1Fun,
-                                  selFun    = codbundle$selFun,
-                                  qFun      = codbundle$qFun,
-                                  dsem = build_DSEM(
-                                    sem = pcodsem_tran,
-                                    family = "fixed",
-                                    sigmaR_prior_sd = 0.5
-                                  ),
-                                  random_rec = TRUE,
-                                  recFun = cod_recFun,
-                                  fit_control = fit_control(
-                                    verbose = 1,
-                                    phase = FALSE)) # warm start -- see the bundle note
-save(cod_sem_tran, file = "Models/cod_sem_tran.Rdata")
-gc() #clear memory
+# Transport is NOT fitted for cod: it failed to converge in four attempts of
+# 1.5-2.5 hours each, where the other five take 10-25 minutes. Capped at 400
+# iterations it reaches 2247.08 with a gradient of 375, against 2213.6-2239.2
+# for its siblings -- an unconverged objective is biased HIGH, so reporting
+# its AIC would argue against the transport hypothesis on an optimiser
+# artefact. Its two covariates explain 3% of the Upwelling variance they
+# point at, which is the likely reason: a coefficient with no information
+# is a flat direction. Uncomment to revisit.
+# cod_sem_tran <- Rceattle::fit_mod(data_list = pcoddata,
+#                                   inits = cod_inits, # SS3's MLE -- see the bundle note
+#                                   estimateMode = 0, # Estimate
+#                                   initMode  = codbundle$initMode,
+#                                   growthFun = codbundle$growthFun,
+#                                   M1Fun     = codbundle$M1Fun,
+#                                   selFun    = codbundle$selFun,
+#                                   qFun      = codbundle$qFun,
+#                                   dsem = build_DSEM(
+#                                     sem = pcodsem_tran,
+#                                     family = "fixed",
+#                                     sigmaR_prior_sd = 0.5
+#                                   ),
+#                                   random_rec = TRUE,
+#                                   recFun = cod_recFun,
+#                                   fit_control = fit_control(
+#                                     verbose = 1,
+#                                     phase = FALSE)) # warm start -- see the bundle note
+# save(cod_sem_tran, file = "Models/cod_sem_tran.Rdata")
+# gc() #clear memory
 
 cod_sem_prey <- Rceattle::fit_mod(data_list = pcoddata,
                                   inits = cod_inits, # SS3's MLE -- see the bundle note
@@ -739,11 +747,7 @@ cod_full_AIC <- rep(AIC(cod_full_mod),length(summ_cod_sem[,1]))
 cod_full_Rsd <-  rep((summary(cod_full_mod)$recruitment_sd$R_sd),length(summ_cod_sem[,1]))  #recruitment SD (sigmaR)
 cod_full_deltaRsd <- rep((cod_iid_Rsd[1]-cod_full_Rsd[1]),length(summ_cod_sem[,1])) #delta recruitment SD (subtract from IID model to see if dleta increases)
 
-summ_cod_sem_tran <- summary(cod_sem_tran)$coefficients %>% dplyr::mutate(Model = "Transport",
-                                                                               Species = "Cod")
-cod_tran_AIC <- rep(AIC(cod_sem_tran),length(summ_cod_sem_tran[,1]))
-cod_tran_Rsd <-  rep((summary(cod_sem_tran)$recruitment_sd$R_sd),length(summ_cod_sem_tran[,1]))  #recruitment SD (sigmaR)
-cod_tran_deltaRsd <- rep((cod_iid_Rsd[1]-cod_tran_Rsd[1]),length(summ_cod_sem_tran[,1])) #delta recruitment SD (subtract from IID model to see if dleta increases)
+# Transport is excluded -- see the fit block above.
 
 summ_cod_sem_prey <- summary(cod_sem_prey)$coefficients %>% dplyr::mutate(Model = "Prey",
                                                                                Species = "Cod")
@@ -758,11 +762,11 @@ cod_hab_Rsd <-  rep((summary(cod_sem_hab)$recruitment_sd$R_sd),length(summ_cod_s
 cod_hab_deltaRsd <- rep((cod_iid_Rsd[1]-cod_hab_Rsd[1]),length(summ_cod_sem_hab[,1])) #delta recruitment SD (subtract from IID model to see if dleta increases)
 
 # summarize results
-Rsdmod_cod <- c(cod_iid_Rsd, cod_dir_Rsd, cod_full_Rsd, cod_tran_Rsd, cod_prey_Rsd, cod_hab_Rsd)
-deltaRsdmod_cod <- c(cod_iid_deltaRsd, cod_dir_deltaRsd, cod_full_deltaRsd, cod_tran_deltaRsd, cod_prey_deltaRsd, cod_hab_deltaRsd)
-AICmod_cod <- c(cod_iid_AIC,cod_dir_AIC, cod_full_AIC, cod_tran_AIC, cod_prey_AIC, cod_hab_AIC)
+Rsdmod_cod <- c(cod_iid_Rsd, cod_dir_Rsd, cod_full_Rsd, cod_prey_Rsd, cod_hab_Rsd)
+deltaRsdmod_cod <- c(cod_iid_deltaRsd, cod_dir_deltaRsd, cod_full_deltaRsd, cod_prey_deltaRsd, cod_hab_deltaRsd)
+AICmod_cod <- c(cod_iid_AIC,cod_dir_AIC, cod_full_AIC, cod_prey_AIC, cod_hab_AIC)
 
-results_cod <- do.call("rbind", list(summ_cod_iid, summ_cod_dir, summ_cod_sem, summ_cod_sem_tran, summ_cod_sem_prey, summ_cod_sem_hab))
+results_cod <- do.call("rbind", list(summ_cod_iid, summ_cod_dir, summ_cod_sem, summ_cod_sem_prey, summ_cod_sem_hab))
 results_cod$AIC <- AICmod_cod
 results_cod$Rec_sd <- Rsdmod_cod
 results_cod$deltaRsd <-deltaRsdmod_cod

@@ -22,7 +22,7 @@ skill_peels <- 3:7
 # Models fitted with phase = FALSE. retrospective() defaults to TRUE and a fit
 # does not record what it used, so without this a peel is phased when its parent
 # was not. Keep in step with the fitting script.
-unphased <- c(paste("Pcod", c("iid", "direct", "full", "tran", "prey", "hab")),
+unphased <- c(paste("Pcod", c("iid", "direct", "full", "prey", "hab")),
               "NORK prey")
 
 
@@ -39,11 +39,12 @@ model_objects <- c(
   "Pollock full" = "pk_full_mod",   "Pollock tran"   = "pk_sem_tran",
   "Pollock prey" = "pk_sem_prey",   "Pollock hab"    = "pk_sem_hab",
   "Pcod iid"     = "cod_iid_mod",   "Pcod direct"    = "cod_direct_mod",
-  "Pcod full"    = "cod_full_mod",  "Pcod tran"      = "cod_sem_tran",
-  "Pcod prey"    = "cod_sem_prey",  "Pcod hab"       = "cod_sem_hab")
+  "Pcod full"    = "cod_full_mod",  "Pcod prey"      = "cod_sem_prey",
+  "Pcod hab"     = "cod_sem_hab")   # no Pcod tran: it does not converge
 
 for (obj in model_objects) {
-  if (file.exists(paste0(obj, ".Rdata"))) load(paste0(obj, ".Rdata"))
+  f <- file.path("Models", paste0(obj, ".Rdata"))
+  if (file.exists(f)) load(f)
 }
 fitted <- vapply(model_objects, exists, logical(1))
 if (any(!fitted)) {
@@ -63,9 +64,9 @@ skill_models <- lapply(model_objects[fitted], get)
 # models the future. rescale = TRUE restandardizes on the peel's own years.
 #
 # Each model is saved as it finishes, so an interrupted run resumes. Delete
-# forecast_skill.Rdata to recompute.
+# Results/forecast_skill.Rdata to recompute.
 skill <- NULL
-if (file.exists("forecast_skill.Rdata")) load("forecast_skill.Rdata")
+if (file.exists("Results/forecast_skill.Rdata")) load("Results/forecast_skill.Rdata")
 
 for (nm in setdiff(names(skill_models), skill$model)) {
   rows <- lapply(c("model", "mean"), function(rule) {
@@ -96,7 +97,7 @@ for (nm in setdiff(names(skill_models), skill$model)) {
   # Both rules or neither: one rule alone has nothing to compare against.
   if (any(vapply(rows, is.null, logical(1)))) next
   skill <- rbind(skill, do.call(rbind, rows))
-  save(skill, file = "forecast_skill.Rdata")
+  save(skill, file = "Results/forecast_skill.Rdata")
   message("done: ", nm)
 }
 
