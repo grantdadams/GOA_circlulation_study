@@ -1,29 +1,30 @@
 # Use outline to navigate
 
-# Libraries ----
-# remotes::install_version("dsem", version = "3.0.0") # Need this version
-# remotes::install_github("grantdadams/Rceattle@dev-DSEM")
-library(Rceattle) # dev-DSEM
+# Which Rceattle to run this with ----
+#   remotes::install_version("dsem", version = "3.0.0")   # EXACTLY 3.0.0
+#   remotes::install_github("afsc-assessments/Rceattle", ref = "dev-DSEM")
+
+library(Rceattle)   # dev-DSEM, >= 5.57.0.9001
 library(dplyr)
 
 
 # Load data ----
+dir.create("Results", showWarnings = FALSE)
 source("Setup environmental data.R")
 source("SEMs.R")
 
 # * Rceattle data ----
-atfdata <- Rceattle::read_data( file = "data/2023_GOA_arrowtooth.xlsx")
+atfdata <- Rceattle::read_data( file = "Data/2023_GOA_arrowtooth.xlsx")
 pkdata <- Rceattle::read_data( file = "Data/2024_GOA_pollock.xlsx")
-pcoddata <- Rceattle::read_data( file = "Data/2024_GOA_pcod.xlsx")
+# Pcod uses a SS3-bridging setup, not the workbook
+codbundle <- readRDS("Data/goa_cod_ss3_bridged.rds")
+pcoddata  <- codbundle$data_list
 nrdata <- Rceattle::read_data(file = "Data/2024_GOA_northern_rockfish.xlsx")
-nrdata$styr <- 1987 # original 1978 but shortened to 1987 to help DSEM submodels converge (NROCK was the only species of the four that had convergence issues)
+nrdata$styr <- 1987 # original 1978 but shortened to 1987 to help DSEM converge
 
 # * Combine stock and environmental data ----
-# envdata reaches back to 1968, earlier than any of the four stocks start. Trim
-# each stock's env_data to its own styr: linkage design matrices align by ROW
-# POSITION, so a covariate series that starts before styr shifts every linkage
-# forward by the difference. (The DSEM joins on Year and is unaffected, but the
-# Pcod M block is a linkage -- see M1_block in "Setup environmental data.R".)
+# envdata goes back to 1968, earlier than any of the four stocks start, so
+# each stock's env_data is trimmed to its own styr.
 atfdata$env_data <- atfdata$env_data %>%
   select(Year, BTempC) %>%
   full_join(envdata, by = "Year") %>%
@@ -36,8 +37,9 @@ pkdata$env_data <- pkdata$env_data %>%
   arrange(Year) %>%
   filter(Year >= pkdata$styr)
 
+# Cod keeps every column
 pcoddata$env_data <- pcoddata$env_data %>%
-  select(Year, CFSR_2022) %>%
+  select(-any_of("post2014")) %>%
   full_join(envdata, by = "Year") %>%
   arrange(Year) %>%
   filter(Year >= pcoddata$styr)
@@ -50,26 +52,39 @@ nrdata$env_data <- nrdata$env_data %>%
 
 plot_data(nrdata)
 
+# * Forecast setup for the skill comparison ----
+rec_dsem <- build_srr(proj_mean_rec = FALSE)
+
+# - Cod has some other initial setups
+cod_recFun <- codbundle$recFun
+cod_recFun$proj_mean_rec <- FALSE
+
+# * Trim projection for speed ----
 atfdata$projyr <- atfdata$endyr
 nrdata$projyr <- nrdata$endyr
 pcoddata$projyr <- pcoddata$endyr
 pkdata$projyr <- pkdata$endyr
 
+# * Cod initial parameters ----
+# - defaults lead to the optimizing ending in a local minima
+nyr_cod  <- length(pcoddata$styr:pcoddata$endyr)
+nenv_cod <- ncol(pcoddata$env_data) - 1L
+cod_inits <- codbundle$inits
+cod_inits$rec_dev      <- cod_inits$rec_dev[, seq_len(nyr_cod), drop = FALSE]
+cod_inits$log_M1_dev   <- cod_inits$log_M1_dev[, , , seq_len(nyr_cod), drop = FALSE]
+cod_inits$M1_beta      <- array(0, c(dim(cod_inits$M1_beta)[1:2], nenv_cod))
+cod_inits$index_q_beta <- matrix(0, nrow(cod_inits$index_q_beta), nenv_cod)
+
 
 # Fit models ----
-# * Arrowtooth ----
-load("atf_iid_mod.Rdata")
-load("atf_direct_mod.Rdata")
-load("atf_full_mod.Rdata")
-load("atf_sem_tran.Rdata")
-load("atf_sem_prey.Rdata")
-load("atf_sem_hab.Rdata")
+# # * Arrowtooth ----
 
 atf_iid_mod <- Rceattle::fit_mod(data_list = atfdata,
                              inits = NULL, # Initial parameters = 0
                              file = NULL, # Don't save
                              estimateMode = 0, # Estimate
                              random_rec = TRUE,
+                             recFun = rec_dsem,
                              dsem = build_DSEM(
                                sem = atfiidsem,
                                family = "fixed",
@@ -80,7 +95,7 @@ atf_iid_mod <- Rceattle::fit_mod(data_list = atfdata,
                              fit_control = fit_control(
                                verbose = 1,
                                phase = TRUE))
-save(atf_iid_mod, file = "atf_iid_mod.Rdata")
+save(atf_iid_mod, file = "Models/atf_iid_mod.Rdata")
 gc() #clear memory
 
 atf_direct_mod <- Rceattle::fit_mod(data_list = atfdata,
@@ -88,6 +103,7 @@ atf_direct_mod <- Rceattle::fit_mod(data_list = atfdata,
                                  file = NULL, # Don't save
                                  estimateMode = 0, # Estimate
                                  random_rec = TRUE,
+                                 recFun = rec_dsem,
                                  dsem = build_DSEM(
                                    sem = atfdirectsem,
                                    family = "fixed",
@@ -98,7 +114,7 @@ atf_direct_mod <- Rceattle::fit_mod(data_list = atfdata,
                                  fit_control = fit_control(
                                    verbose = 1,
                                    phase = TRUE))
-save(atf_direct_mod, file = "atf_direct_mod.Rdata")
+save(atf_direct_mod, file = "Models/atf_direct_mod.Rdata")
 gc() #clear memory
 
 atf_full_mod <- Rceattle::fit_mod(data_list = atfdata,
@@ -106,6 +122,7 @@ atf_full_mod <- Rceattle::fit_mod(data_list = atfdata,
                                  file = NULL, # Don't save
                                  estimateMode = 0, # Estimate
                                  random_rec = TRUE,
+                                 recFun = rec_dsem,
                                  dsem = build_DSEM(
                                    sem = atfsem,
                                    family = "fixed",
@@ -116,7 +133,7 @@ atf_full_mod <- Rceattle::fit_mod(data_list = atfdata,
                                  fit_control = fit_control(
                                    verbose = 1,
                                    phase = TRUE))
-save(atf_full_mod, file = "atf_full_mod.Rdata")
+save(atf_full_mod, file = "Models/atf_full_mod.Rdata")
 gc() #clear memory
 
 atf_sem_tran <- Rceattle::fit_mod(data_list = atfdata,
@@ -124,6 +141,7 @@ atf_sem_tran <- Rceattle::fit_mod(data_list = atfdata,
                                   file = NULL, # Don't save
                                   estimateMode = 0, # Estimate
                                   random_rec = TRUE,
+                                  recFun = rec_dsem,
                                   dsem = build_DSEM(
                                     sem = atfsem_tran,
                                     family = "fixed",
@@ -134,7 +152,7 @@ atf_sem_tran <- Rceattle::fit_mod(data_list = atfdata,
                                   fit_control = fit_control(
                                     verbose = 1,
                                     phase = TRUE))
-save(atf_sem_tran, file = "atf_sem_tran.Rdata")
+save(atf_sem_tran, file = "Models/atf_sem_tran.Rdata")
 gc() #clear memory
 
 atf_sem_prey <- Rceattle::fit_mod(data_list = atfdata,
@@ -142,6 +160,7 @@ atf_sem_prey <- Rceattle::fit_mod(data_list = atfdata,
                                    file = NULL, # Don't save
                                    estimateMode = 0, # Estimate
                                    random_rec = TRUE,
+                                   recFun = rec_dsem,
                                    dsem = build_DSEM(
                                      sem = atfsem_prey,
                                      family = "fixed",
@@ -152,7 +171,7 @@ atf_sem_prey <- Rceattle::fit_mod(data_list = atfdata,
                                    fit_control = fit_control(
                                      verbose = 1,
                                      phase = TRUE))
-save(atf_sem_prey, file = "atf_sem_prey.Rdata")
+save(atf_sem_prey, file = "Models/atf_sem_prey.Rdata")
 gc() #clear memory
 
 atf_sem_hab <- Rceattle::fit_mod(data_list = atfdata,
@@ -160,6 +179,7 @@ atf_sem_hab <- Rceattle::fit_mod(data_list = atfdata,
                                    file = NULL, # Don't save
                                    estimateMode = 0, # Estimate
                                    random_rec = TRUE,
+                                   recFun = rec_dsem,
                                    dsem = build_DSEM(
                                      sem = atfsem_hab,
                                      family = "fixed",
@@ -170,25 +190,17 @@ atf_sem_hab <- Rceattle::fit_mod(data_list = atfdata,
                                    fit_control = fit_control(
                                      verbose = 1,
                                      phase = TRUE))
-save(atf_sem_hab, file = "atf_sem_hab.Rdata")
+save(atf_sem_hab, file = "Models/atf_sem_hab.Rdata")
 gc() #clear memory
 
 
 # * Northern rockfish ----
 # - Estimate M with lognormal prior (urm: mean_M = 0.06, cv_M = 0.05).
-#   urm ESTIMATES M (log_M is a free parameter with this prior), so this is the
-#   configuration directly comparable to the urm reference model.
-#   M_prior_sd is log-scale (= cv_M = 0.05), matching urm's dnorm(log(M), ...).
-load("nork_iid_mod.Rdata")
-load("nork_direct_mod.Rdata")
-load("nork_full_mod.Rdata")
-load("nork_sem_tran.Rdata")
-load("nork_sem_prey.Rdata")
-load("nork_sem_hab.Rdata")
 
 nork_iid_mod <- Rceattle::fit_mod(data_list = nrdata,
                               estimateMode = 0,
                               random_rec = TRUE,
+                              recFun = rec_dsem,
                               msmMode = 0,
                               initMode = 2,
                               dsem = build_DSEM(
@@ -200,12 +212,13 @@ nork_iid_mod <- Rceattle::fit_mod(data_list = nrdata,
                               fit_control = fit_control(
                                 verbose = 1,
                                 phase = TRUE))
-save(nork_iid_mod, file = "nork_iid_mod.Rdata")
+save(nork_iid_mod, file = "Models/nork_iid_mod.Rdata")
 gc() #clear memory
 
 nork_direct_mod <- Rceattle::fit_mod(data_list = nrdata,
                                   estimateMode = 0,
                                   random_rec = TRUE,
+                                  recFun = rec_dsem,
                                   msmMode = 0,
                                   initMode = 2,
                                   dsem = build_DSEM(
@@ -217,12 +230,13 @@ nork_direct_mod <- Rceattle::fit_mod(data_list = nrdata,
                                   fit_control = fit_control(
                                     verbose = 1,
                                     phase = TRUE))
-save(nork_direct_mod, file = "nork_direct_mod.Rdata")
+save(nork_direct_mod, file = "Models/nork_direct_mod.Rdata")
 gc() #clear memory
 
 nork_full_mod <- Rceattle::fit_mod(data_list = nrdata,
                                   estimateMode = 0,
                                   random_rec = TRUE,
+                                  recFun = rec_dsem,
                                   msmMode = 0,
                                   initMode = 2,
                                   dsem = build_DSEM(
@@ -234,12 +248,13 @@ nork_full_mod <- Rceattle::fit_mod(data_list = nrdata,
                                   fit_control = fit_control(
                                     verbose = 1,
                                     phase = TRUE))
-save(nork_full_mod, file = "nork_full_mod.Rdata")
+save(nork_full_mod, file = "Models/nork_full_mod.Rdata")
 gc() #clear memory
 
 nork_sem_tran <- Rceattle::fit_mod(data_list = nrdata,
                                    estimateMode = 0,
                                    random_rec = TRUE,
+                                   recFun = rec_dsem,
                                    msmMode = 0,
                                    initMode = 2,
                                    dsem = build_DSEM(
@@ -251,12 +266,13 @@ nork_sem_tran <- Rceattle::fit_mod(data_list = nrdata,
                                    fit_control = fit_control(
                                      verbose = 1,
                                      phase = TRUE))
-save(nork_sem_tran, file = "nork_sem_tran.Rdata")
+save(nork_sem_tran, file = "Models/nork_sem_tran.Rdata")
 gc() #clear memory
 
 nork_sem_prey <- Rceattle::fit_mod(data_list = nrdata,
                                    estimateMode = 0,
                                    random_rec = TRUE,
+                                   recFun = rec_dsem,
                                    msmMode = 0,
                                    initMode = 2,
                                    dsem = build_DSEM(
@@ -268,12 +284,13 @@ nork_sem_prey <- Rceattle::fit_mod(data_list = nrdata,
                                    fit_control = fit_control(
                                      verbose = 1,
                                      phase = FALSE))
-save(nork_sem_prey, file = "nork_sem_prey.Rdata")
+save(nork_sem_prey, file = "Models/nork_sem_prey.Rdata")
 gc() #clear memory
 
 nork_sem_hab <- Rceattle::fit_mod(data_list = nrdata,
                                    estimateMode = 0,
                                    random_rec = TRUE,
+                                   recFun = rec_dsem,
                                    msmMode = 0,
                                    initMode = 2,
                                    dsem = build_DSEM(
@@ -285,20 +302,15 @@ nork_sem_hab <- Rceattle::fit_mod(data_list = nrdata,
                                    fit_control = fit_control(
                                      verbose = 1,
                                      phase = TRUE))
-save(nork_sem_hab, file = "nork_sem_hab.Rdata")
+save(nork_sem_hab, file = "Models/nork_sem_hab.Rdata")
 gc() #clear memory
 
 
 # * Pollock ----
-load("pk_iid_mod.Rdata")
-load("pk_direct_mod.Rdata")
-load("pk_full_mod.Rdata")
-load("pk_sem_tran.Rdata")
-load("pk_sem_prey.Rdata")
-load("pk_sem_hab.Rdata")
 pk_iid_mod <- fit_mod(data_list = pkdata,
                   estimateMode = 0,   # Estimate
                   random_rec = TRUE,
+                  recFun = rec_dsem,
                   msmMode = 0,        # Single species mode
                   initMode = 1,       # Unfished equilibrium with init_dev's turned off
                   dsem = build_DSEM(
@@ -308,13 +320,14 @@ pk_iid_mod <- fit_mod(data_list = pkdata,
                   fit_control = fit_control(
                     verbose = 1,
                     phase = TRUE))
-save(pk_iid_mod, file = "pk_iid_mod.Rdata")
+save(pk_iid_mod, file = "Models/pk_iid_mod.Rdata")
 gc() #clear memory
 
 
 pk_direct_mod <- fit_mod(data_list = pkdata,
                        estimateMode = 0,   # Estimate
                        random_rec = TRUE,
+                       recFun = rec_dsem,
                        msmMode = 0,        # Single species mode
                        initMode = 1,
                        dsem = build_DSEM(
@@ -325,12 +338,13 @@ pk_direct_mod <- fit_mod(data_list = pkdata,
                        fit_control = fit_control(
                          verbose = 1,
                          phase = TRUE))
-save(pk_direct_mod, file = "pk_direct_mod.Rdata")
+save(pk_direct_mod, file = "Models/pk_direct_mod.Rdata")
 gc() #clear memory
 
 pk_full_mod <- fit_mod(data_list = pkdata,
                        estimateMode = 0,   # Estimate
                        random_rec = TRUE,
+                       recFun = rec_dsem,
                        msmMode = 0,        # Single species mode
                        initMode = 1,
                        dsem = build_DSEM(
@@ -341,12 +355,13 @@ pk_full_mod <- fit_mod(data_list = pkdata,
                        fit_control = fit_control(
                          verbose = 1,
                          phase = TRUE))
-save(pk_full_mod, file = "pk_full_mod.Rdata")
+save(pk_full_mod, file = "Models/pk_full_mod.Rdata")
 gc() #clear memory
 
 pk_sem_tran <- fit_mod(data_list = pkdata,
                        estimateMode = 0,   # Estimate
                        random_rec = TRUE,
+                       recFun = rec_dsem,
                        msmMode = 0,        # Single species mode
                        initMode = 1,
                        dsem = build_DSEM(
@@ -357,12 +372,13 @@ pk_sem_tran <- fit_mod(data_list = pkdata,
                        fit_control = fit_control(
                          verbose = 1,
                          phase = TRUE))
-save(pk_sem_tran, file = "pk_sem_tran.Rdata")
+save(pk_sem_tran, file = "Models/pk_sem_tran.Rdata")
 gc() #clear memory
 
 pk_sem_prey <- fit_mod(data_list = pkdata,
                        estimateMode = 0,   # Estimate
                        random_rec = TRUE,
+                       recFun = rec_dsem,
                        msmMode = 0,        # Single species mode
                        initMode = 1,
                        dsem = build_DSEM(
@@ -373,12 +389,13 @@ pk_sem_prey <- fit_mod(data_list = pkdata,
                        fit_control = fit_control(
                          verbose = 1,
                          phase = TRUE))
-save(pk_sem_prey, file = "pk_sem_prey.Rdata")
+save(pk_sem_prey, file = "Models/pk_sem_prey.Rdata")
 gc() #clear memory
 
 pk_sem_hab <- fit_mod(data_list = pkdata,
                        estimateMode = 0,   # Estimate
                        random_rec = TRUE,
+                       recFun = rec_dsem,
                        msmMode = 0,        # Single species mode
                        initMode = 1,
                        dsem = build_DSEM(
@@ -389,123 +406,176 @@ pk_sem_hab <- fit_mod(data_list = pkdata,
                        fit_control = fit_control(
                          verbose = 1,
                          phase = TRUE))
-save(pk_sem_hab, file = "pk_sem_hab.Rdata")
+save(pk_sem_hab, file = "Models/pk_sem_hab.Rdata")
 gc() #clear memory
+
 # * Pcod ----
-load("cod_iid_mod.Rdata")
-load("cod_direct_mod.Rdata")
-load("cod_full_mod.Rdata")
-load("cod_sem_tran.Rdata")
-load("cod_sem_prey.Rdata")
-load("cod_sem_hab.Rdata")
-
 cod_iid_mod <- Rceattle::fit_mod(data_list = pcoddata,
-                             inits = NULL, # Initial parameters = 0
+                             inits = cod_inits, # SS3's MLE -- see the bundle note
                              estimateMode = 0, # Estimate
-
-                             M1Fun        = M1_block,
+                             initMode  = codbundle$initMode,
+                             growthFun = codbundle$growthFun,
+                             M1Fun     = codbundle$M1Fun,
+                             selFun    = codbundle$selFun,
+                             qFun      = codbundle$qFun,
                              dsem = build_DSEM(
                                sem = pcodiidsem,
                                family = "fixed",
                                sigmaR_prior_sd = 0.5
                              ),
                              random_rec = TRUE,
+                             recFun = cod_recFun,
                              fit_control = fit_control(
                                verbose = 1,
-                               phase = TRUE))
-save(cod_iid_mod, file = "cod_iid_mod.Rdata")
+                               phase = FALSE)) # warm start -- see the bundle note
+save(cod_iid_mod, file = "Models/cod_iid_mod.Rdata")
 gc() #clear memory
 
 
 cod_direct_mod <- Rceattle::fit_mod(data_list = pcoddata,
-                                  inits = NULL, # Initial parameters = 0
+                                  inits = cod_inits, # SS3's MLE -- see the bundle note
                                   estimateMode = 0, # Estimate
-
-                                  M1Fun        = M1_block,
+                                  initMode  = codbundle$initMode,
+                                  growthFun = codbundle$growthFun,
+                                  M1Fun     = codbundle$M1Fun,
+                                  selFun    = codbundle$selFun,
+                                  qFun      = codbundle$qFun,
                                   dsem = build_DSEM(
                                     sem = pcoddirectsem,
                                     family = "fixed",
                                     sigmaR_prior_sd = 0.5
                                   ),
                                   random_rec = TRUE,
+                                  recFun = cod_recFun,
                                   fit_control = fit_control(
                                     verbose = 1,
-                                    phase = TRUE))
-save(cod_direct_mod, file = "cod_direct_mod.Rdata")
+                                    phase = FALSE)) # warm start -- see the bundle note
+save(cod_direct_mod, file = "Models/cod_direct_mod.Rdata")
 gc() #clear memory
 
 cod_full_mod <- Rceattle::fit_mod(data_list = pcoddata,
-                                  inits = NULL, # Initial parameters = 0
+                                  inits = cod_inits, # SS3's MLE -- see the bundle note
                                   estimateMode = 0, # Estimate
-
-                                  M1Fun        = M1_block,
+                                  initMode  = codbundle$initMode,
+                                  growthFun = codbundle$growthFun,
+                                  M1Fun     = codbundle$M1Fun,
+                                  selFun    = codbundle$selFun,
+                                  qFun      = codbundle$qFun,
                                   dsem = build_DSEM(
                                     sem = pcodsem,
                                     family = "fixed",
                                     sigmaR_prior_sd = 0.5
                                   ),
                                   random_rec = TRUE,
+                                  recFun = cod_recFun,
                                   fit_control = fit_control(
                                     verbose = 1,
-                                    phase = TRUE))
-save(cod_full_mod, file = "cod_full_mod.Rdata")
+                                    phase = FALSE)) # warm start -- see the bundle note
+save(cod_full_mod, file = "Models/cod_full_mod.Rdata")
 gc() #clear memory
 
 
 cod_sem_tran <- Rceattle::fit_mod(data_list = pcoddata,
-                                  inits = NULL, # Initial parameters = 0
+                                  inits = cod_inits, # SS3's MLE -- see the bundle note
                                   estimateMode = 0, # Estimate
-
-                                  M1Fun        = M1_block,
+                                  initMode  = codbundle$initMode,
+                                  growthFun = codbundle$growthFun,
+                                  M1Fun     = codbundle$M1Fun,
+                                  selFun    = codbundle$selFun,
+                                  qFun      = codbundle$qFun,
                                   dsem = build_DSEM(
                                     sem = pcodsem_tran,
                                     family = "fixed",
                                     sigmaR_prior_sd = 0.5
                                   ),
                                   random_rec = TRUE,
+                                  recFun = cod_recFun,
                                   fit_control = fit_control(
                                     verbose = 1,
-                                    phase = TRUE))
-save(cod_sem_tran, file = "cod_sem_tran.Rdata")
+                                    phase = FALSE)) # warm start -- see the bundle note
+save(cod_sem_tran, file = "Models/cod_sem_tran.Rdata")
 gc() #clear memory
 
 cod_sem_prey <- Rceattle::fit_mod(data_list = pcoddata,
-                                  inits = NULL, # Initial parameters = 0
+                                  inits = cod_inits, # SS3's MLE -- see the bundle note
                                   estimateMode = 0, # Estimate
-
-                                  M1Fun        = M1_block,
+                                  initMode  = codbundle$initMode,
+                                  growthFun = codbundle$growthFun,
+                                  M1Fun     = codbundle$M1Fun,
+                                  selFun    = codbundle$selFun,
+                                  qFun      = codbundle$qFun,
                                   dsem = build_DSEM(
                                     sem = pcodsem_prey,
                                     family = "fixed",
                                     sigmaR_prior_sd = 0.5
                                   ),
                                   random_rec = TRUE,
+                                  recFun = cod_recFun,
                                   fit_control = fit_control(
                                     verbose = 1,
-                                    phase = TRUE))
-save(cod_sem_prey, file = "cod_sem_prey.Rdata")
+                                    phase = FALSE)) # warm start -- see the bundle note
+save(cod_sem_prey, file = "Models/cod_sem_prey.Rdata")
 gc() #clear memory
 
 cod_sem_hab <- Rceattle::fit_mod(data_list = pcoddata,
-                                  inits = NULL, # Initial parameters = 0
+                                  inits = cod_inits, # SS3's MLE -- see the bundle note
                                   estimateMode = 0, # Estimate
-
-                                  M1Fun        = M1_block,
+                                  initMode  = codbundle$initMode,
+                                  growthFun = codbundle$growthFun,
+                                  M1Fun     = codbundle$M1Fun,
+                                  selFun    = codbundle$selFun,
+                                  qFun      = codbundle$qFun,
                                   dsem = build_DSEM(
                                     sem = pcodsem_hab,
                                     family = "fixed",
                                     sigmaR_prior_sd = 0.5
                                   ),
                                   random_rec = TRUE,
+                                  recFun = cod_recFun,
                                   fit_control = fit_control(
                                     verbose = 1,
-                                    phase = TRUE))
-save(cod_sem_hab, file = "cod_sem_hab.Rdata")
+                                    phase = FALSE)) # warm start -- see the bundle note
+save(cod_sem_hab, file = "Models/cod_sem_hab.Rdata")
 gc() #clear memory
 
-# Summaries ----
+
+# Load models ----
+# # * Arrowtooth ----
+# load("Models/atf_iid_mod.Rdata")
+# load("Models/atf_direct_mod.Rdata")
+# load("Models/atf_full_mod.Rdata")
+# load("Models/atf_sem_tran.Rdata")
+# load("Models/atf_sem_prey.Rdata")
+# load("Models/atf_sem_hab.Rdata")
+
+# * Northern rockfish ----
+# load("Models/nork_iid_mod.Rdata")
+# load("Models/nork_direct_mod.Rdata")
+# load("Models/nork_full_mod.Rdata")
+# load("Models/nork_sem_tran.Rdata")
+# load("Models/nork_sem_prey.Rdata")
+# load("Models/nork_sem_hab.Rdata")
+
+# * Pollock ----
+# load("Models/pk_iid_mod.Rdata")
+# load("Models/pk_direct_mod.Rdata")
+# load("Models/pk_full_mod.Rdata")
+# load("Models/pk_sem_tran.Rdata")
+# load("Models/pk_sem_prey.Rdata")
+# load("Modelspk_sem_hab.Rdata")
+
+# * Pcod ----
+# load("Models/cod_iid_mod.Rdata")
+# load("Models/cod_direct_mod.Rdata")
+# load("Models/cod_full_mod.Rdata")
+# # No cod_sem_tran.Rdata because of convergence
+# load("Models/cod_sem_prey.Rdata")
+# load("Models/cod_sem_hab.Rdata")
+
+
+# Summarize models ----
 # - ATF
-summ_atf_iid <- summary(atf_iid_mod)$coefficients %>% dplyr::mutate(Model = "Base",
+summ_atf_iid <- summary(atf_iid_mod)$coefficients %>% dplyr::mutate(Model = "IID",
                                                               Species = "ATF")
 atf_iid_AIC <- rep(AIC(atf_iid_mod),length(summ_atf_iid[,1]))
 atf_iid_Rsd <-  rep((summary(atf_iid_mod)$recruitment_sd$R_sd),length(summ_atf_iid[,1]))  #recruitment SD (sigmaR)
@@ -699,5 +769,7 @@ results_cod$deltaRsd <-deltaRsdmod_cod
 
 write.csv(results_cod, file = "Results/Initial_DSEM_cod.csv")
 
-
-
+# Forecast skill ----
+# Moved to its own script: retrospective forecast skill, DSEM rule against
+# mean recruitment, for all 24 fits. It takes hours, so run it separately.
+#   source("Forecast skill.R")
