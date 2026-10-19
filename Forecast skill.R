@@ -176,6 +176,16 @@ print(as.data.frame(skill_by_horizon))
 
 # By stock and submodel ----
 
+# READ THE COD ROWS WITH CARE. All six are MASE > 1, i.e. worse than holding
+# the terminal estimate flat, and that is a property of the cod PEELS rather
+# than of the DSEM: the peel's recruitment forecast is constant to the decimal
+# at 1.33x the parent's R0, and a 7-year peel re-estimates recruitment for the
+# SAME years at about twice the parent's level, where the other three stocks
+# reproduce their parent to within 8-13%. It is uniform across all six cod
+# submodels and both projection rules, so it does not separate them. The cod
+# AIC table in the fitting script is unaffected.
+
+
 # Read this table, not the pooled one. The two rules differ in LEVEL as well as
 # in information -- the model rule projects at predicted recruitment, the mean
 # rule at the arithmetic mean of realised recruitment -- and that gap is shared
