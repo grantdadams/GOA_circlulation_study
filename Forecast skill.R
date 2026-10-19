@@ -2,12 +2,21 @@
 #
 # For each fitted model, project the peeled years twice -- once with the DSEM latent states and once at the historical mean.
 #
-# Run after "Rceattle DSEM models - Grant.R" has saved the 24 fits. Hours, not
-# minutes: 24 models x 2 rules x 5 peels, and every peel is a refit.
+# Run after "Rceattle DSEM models - Grant.R" has saved the fits. Hours, not
+# minutes: every model is refit once per peel per rule.
+#
+# SPEED. The loop below is serial over models and leaves the peels to
+# retrospective()'s own `cores`. On a 12-core machine that was measured at one
+# busy worker and ~2 h per cod model; running one MODEL per R session with
+# `cores = 2` each saturated the machine and cut it to about an hour for five.
+# If this looks hung, that is what is happening -- it is not. The cache below
+# is per model, so several sessions can share it if they write to different
+# files and the results are rbind()ed.
 #
 # Writes Results/forecast_skill*.csv.
 
-library(Rceattle)   # dev-DSEM, >= 5.57.0.9001
+library(Rceattle)   # dev-DSEM, >= 5.57.0.9002
+source("Setup environmental data.R")   # envdata: the covariates the SEMs read
 library(dplyr)
 dir.create("Results", showWarnings = FALSE)
 
@@ -22,7 +31,7 @@ skill_peels <- 3:7
 # Models fitted with phase = FALSE. retrospective() defaults to TRUE and a fit
 # does not record what it used, so without this a peel is phased when its parent
 # was not. Keep in step with the fitting script.
-unphased <- c(paste("Pcod", c("iid", "direct", "full", "prey", "hab")),
+unphased <- c(paste("Pcod", c("iid", "direct", "full", "tran", "prey", "hab")),
               "NORK prey")
 
 
@@ -39,8 +48,8 @@ model_objects <- c(
   "Pollock full" = "pk_full_mod",   "Pollock tran"   = "pk_sem_tran",
   "Pollock prey" = "pk_sem_prey",   "Pollock hab"    = "pk_sem_hab",
   "Pcod iid"     = "cod_iid_mod",   "Pcod direct"    = "cod_direct_mod",
-  "Pcod full"    = "cod_full_mod",  "Pcod prey"      = "cod_sem_prey",
-  "Pcod hab"     = "cod_sem_hab")   # no Pcod tran: it does not converge
+  "Pcod full"    = "cod_full_mod",  "Pcod tran"      = "cod_sem_tran",
+  "Pcod prey"    = "cod_sem_prey",  "Pcod hab"       = "cod_sem_hab")
 
 for (obj in model_objects) {
   f <- file.path("Models", paste0(obj, ".Rdata"))
@@ -58,10 +67,28 @@ skill_models <- lapply(model_objects[fitted], get)
 # One retrospective per rule, as ?hindcast_skill requires. The two differ only
 # because every model is fitted with proj_mean_rec = FALSE.
 #
-# rescale = TRUE is NOT optional. Under family = "fixed" the covariate columns
+# WHICH columns to rescale, per model. env_data holds covariates AND, for cod,
+# the SS3 selectivity design matrix as 0/1 dummies. Standardizing a design
+# column scores the peel's warm-started coefficient against a column it was not
+# fitted on -- on cod that is 67109 against 2050 at the peel's start, and the
+# fit then dies. So name the covariates: everything no linkage reads as design.
+# The covariates are the ones joined from `envdata` in the fitting script; a
+# stock's own original columns and cod's design matrix are not in it.
+rescale_cols <- function(m) {
+  intersect(setdiff(names(m$data_list$env_data), "Year"),
+            setdiff(names(envdata), "Year"))
+}
+
+# getsd = FALSE is required, not an optimisation. retrospective() inherits
+# getsd from the parent fit, and the cod fits return standard errors, so each
+# peel would compute a full sdreport -- ~1.5 GB per worker, after which the
+# parallel peels die with "NA/NaN gradient evaluation" and fall back to running
+# sequentially. MASE reads point estimates only, so that work is pure waste.
+#
+# Rescaling is NOT optional. Under family = "fixed" the covariate columns
 # of the DSEM state ARE the environmental data, and a peel warm-started from the
 # parent would inherit them for years AFTER the peel -- handing the covariate
-# models the future. rescale = TRUE restandardizes on the peel's own years.
+# models the future. Rescaling restandardizes on the peel's own years.
 #
 # Each model is saved as it finishes, so an interrupted run resumes. Delete
 # Results/forecast_skill.Rdata to recompute.
@@ -71,8 +98,10 @@ if (file.exists("Results/forecast_skill.Rdata")) load("Results/forecast_skill.Rd
 for (nm in setdiff(names(skill_models), skill$model)) {
   rows <- lapply(c("model", "mean"), function(rule) {
     hs <- try(hindcast_skill(skill_models[[nm]], peels = skill_peels,
-                             forecast_rec = rule, rescale = TRUE,
-                             fit_control = fit_control(phase = !nm %in% unphased)),
+                             forecast_rec = rule,
+                             rescale = rescale_cols(skill_models[[nm]]),
+                             fit_control = fit_control(phase = !nm %in% unphased,
+                                                       getsd = FALSE)),
               silent = TRUE)
     if (inherits(hs, "try-error")) {
       message("FAILED: ", nm, " (", rule, ") -- ",
@@ -105,9 +134,12 @@ for (nm in setdiff(names(skill_models), skill$model)) {
 # Compare the two rules ----
 
 # Relabelled "dsem"/"mean" so the pivot does not collide with the model column.
-# `ratio` below 1 means the model's own forecast beat mean recruitment. It uses
-# the raw errors, not the two MASEs: each rule fits its own peels, so each MASE
-# is scaled by a different baseline.
+# `ratio` below 1 means the model's own forecast beat mean recruitment. It is
+# NOT independent of MASE: `forecast_rec` does not touch the peel's hindcast
+# fit, so `mae_naive` is bit-identical between the rules and `ratio` equals
+# mase_dsem / mase_mean to 9e-16. Lead with `mase_dsem`: the ratio carries the
+# level gap between the two projection rules, and on that scale the covariate-
+# free `iid` submodel tops the ranking on stocks it cannot beat on MASE.
 paired <- names(which(tapply(skill$rule, skill$model,
                              function(r) length(unique(r))) == 2L))
 
