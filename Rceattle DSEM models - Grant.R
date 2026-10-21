@@ -403,3 +403,8 @@ results_cod <- summarize_species(
 # Moved to its own script: retrospective forecast skill, DSEM rule against
 # mean recruitment, for all 24 fits. It takes hours, so run it separately.
 #   source("Forecast skill.R")
+check <- forecast_skill %>% filter(`Forecast year` %in% c(1) & Object == "R") %>%
+  mutate(RMSE_better = rmsse_dsem < rmsse_mean,
+         MASE_better = mase_dsem < mase_mean) %>%
+  dplyr::select(species, model, mase_dsem, mase_mean, MASE_better, rmsse_dsem, rmsse_mean, RMSE_better)
+
